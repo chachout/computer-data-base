@@ -56,8 +56,8 @@ public class ComputerDAO
 		try
 		{
 			PreparedStatement prepare = preparation.prepareStatement(PAGINATION);
-			prepare.setInt(1, limit);
-			prepare.setInt(2, offset);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
 			ResultSet resultat=prepare.executeQuery();
 			while (resultat.next())
 			{ 

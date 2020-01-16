@@ -6,7 +6,7 @@ public class Connexion
 {
 	String url = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	String user = "root";
-	String password = "Chabert1996";
+	String password = "qwerty1234";
 	Connection connexion;
 	public Connection connexionOpen()
 	{
@@ -14,7 +14,6 @@ public class Connexion
 		{
 			connexion = DriverManager.getConnection(url,user,password);
 			System.out.println("La connexion est établi");
-			//Statement statement=connexion.createStatement();
 			return connexion;
 		}
 		catch (SQLException e)
