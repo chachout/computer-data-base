@@ -11,7 +11,7 @@ public class ComputerDAO
 	public static String TROUVERID = "SELECT * FROM computer WHERE id = ?";
 	public static String TROUVERNOM = "SELECT * FROM computer WHERE name = ?";
 	public static String MODIFIER = "UPDATE computeur SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-	public static String EFFACER = "DELETE FROM computer WHERE computer_id = ?";
+	public static String EFFACER = "DELETE FROM computer WHERE id = ?";
 	public static ArrayList<Computer> toutComputer()
 	{
 		Connexion connexion = new Connexion();
@@ -213,24 +213,15 @@ public class ComputerDAO
 		Connection preparation = connexion.connexionOpen();
 		Computer comp = new Computer(null);
 		comp = trouverid(computer_id);
-		if (comp.getName()!=null)
+		try
 		{
-			try
-			{
-				PreparedStatement prepare = preparation.prepareStatement(EFFACER) ;
-				prepare.setLong(1, computer_id);
-				prepare.executeUpdate();
-				comp = trouverid(computer_id);
-				if (comp.getName()!=null)
-				{
-					System.out.println("L'ordinateur n'a pas été supprimée");
-				}
-
-			}
-			catch (SQLException e)
-			{
-				e.printStackTrace();
-			}
+			PreparedStatement prepare = preparation.prepareStatement(EFFACER) ;
+			prepare.setLong(1, computer_id);
+			prepare.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
 		}
 		connexion.connexionClose();
 	}
