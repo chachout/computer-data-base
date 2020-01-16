@@ -5,7 +5,7 @@ public class Company
 	Long id;
 	String name;
 	public Company(Long company_id, String name) 
-	{
+	{  
 		super();
 		this.id = company_id;
 		this.name = name;
