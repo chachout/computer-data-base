@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 public class Connexion 
 {
-	String url = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-	String user = "root";
-	String password = "qwerty1234";
-	Connection connexion;
-	public Connection connexionOpen()
+	static String url = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+	static String user = "root";
+	static String password = "qwerty1234";
+	static Connection connexion;
+	private static Connection connexionOpen()
 	{
 		try
 		{
@@ -22,6 +22,11 @@ public class Connexion
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public Connection connec()
+	{
+		Connection preparation = Connexion.connexionOpen();
+		return preparation;
 	}
 	public void connexionClose()
 	{

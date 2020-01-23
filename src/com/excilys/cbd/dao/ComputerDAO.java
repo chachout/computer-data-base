@@ -1,7 +1,11 @@
 package com.excilys.cbd.dao;
 import java.util.ArrayList;
+
+import com.excilys.cbd.model.*;
 import java.sql.*;
-import com.excilys.cbd.bdd.Computer;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class ComputerDAO
 {
@@ -15,7 +19,7 @@ public class ComputerDAO
 	public static ArrayList<Computer> toutComputer()
 	{
 		Connexion connexion = new Connexion();
-		Connection preparation=connexion.connexionOpen();
+		Connection preparation=connexion.connec();
 		ArrayList<Computer> listComputer= new ArrayList<Computer>();
 		try
 		{
@@ -23,16 +27,15 @@ public class ComputerDAO
 			ResultSet resultat=prepare.executeQuery();
 			while (resultat.next())
 			{ 
+				
 				String name =resultat.getString("name");
-				Timestamp introduced = resultat.getTimestamp("introduced");
-				Timestamp discontinued = resultat.getTimestamp("discontinued");
+				Timestamp intro = resultat.getTimestamp("introduced");
+				Timestamp disco = resultat.getTimestamp("discontinued");
+				LocalDate introduced = intro.toLocalDateTime().toLocalDate();
+				LocalDate discontinued = disco.toLocalDateTime().toLocalDate();
 				Long company_id=resultat.getLong("company_id");
-				Computer comp = new Computer(name);
-				comp.setIntroduced(introduced);
-				comp.setDiscontinued(discontinued);
-				comp.setCompany_id(company_id);				
-
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany_id());
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setIdCompany(company_id).build();
+				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getIdCompany());
 				if (comp.getName()!=null)
 				{
 					listComputer.add(comp);
@@ -51,7 +54,7 @@ public class ComputerDAO
 	public static ArrayList<Computer> pageComputer(int limit, int offset)
 	{
 		Connexion connexion = new Connexion();
-		Connection preparation=connexion.connexionOpen();
+		Connection preparation=connexion.connec();
 		ArrayList<Computer> listComputer= new ArrayList<Computer>();
 		try
 		{
@@ -62,15 +65,14 @@ public class ComputerDAO
 			while (resultat.next())
 			{ 
 				String name =resultat.getString("name");
-				Timestamp introduced = resultat.getTimestamp("introduced");
-				Timestamp discontinued = resultat.getTimestamp("discontinued");
+				Timestamp intro = resultat.getTimestamp("introduced");
+				Timestamp disco = resultat.getTimestamp("discontinued");
+				LocalDate introduced = intro.toLocalDateTime().toLocalDate();
+				LocalDate discontinued = disco.toLocalDateTime().toLocalDate();
 				Long company_id=resultat.getLong("company_id");
-				Computer comp = new Computer(name);
-				comp.setIntroduced(introduced);
-				comp.setDiscontinued(discontinued);
-				comp.setCompany_id(company_id);				
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setIdCompany(company_id).build();			
 
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany_id());
+				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getIdCompany());
 				if (comp.getName()!=null)
 				{
 					listComputer.add(comp);
@@ -89,7 +91,7 @@ public class ComputerDAO
 	public static Computer trouverid (Long id)
 	{
 		Connexion connexion = new Connexion();
-		Connection preparation = connexion.connexionOpen();
+		Connection preparation=connexion.connec();
 		try
 		{
 			PreparedStatement prepare = preparation.prepareStatement(TROUVERID) ;
@@ -99,16 +101,14 @@ public class ComputerDAO
 			{ 
 
 				String name =resultat.getString("name");
-				Timestamp introduced = resultat.getTimestamp("introduced");
-				Timestamp discontinued = resultat.getTimestamp("discontinued");
+				Timestamp intro = resultat.getTimestamp("introduced");
+				Timestamp disco = resultat.getTimestamp("discontinued");
+				LocalDate introduced = intro.toLocalDateTime().toLocalDate();
+				LocalDate discontinued = disco.toLocalDateTime().toLocalDate();
 				Long company_id=resultat.getLong("company_id");
-				Computer comp = new Computer(null);
-				comp.setName(name);
-				comp.setIntroduced(introduced);
-				comp.setDiscontinued(discontinued);
-				comp.setCompany_id(company_id);				
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setIdCompany(company_id).build();			
 
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany_id());
+				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getIdCompany());
 				if (comp.getName()!=null)
 				{
 					connexion.connexionClose();
@@ -132,7 +132,7 @@ public class ComputerDAO
 	public static Computer trouvernom (String name)
 	{
 		Connexion connexion = new Connexion();
-		Connection preparation=connexion.connexionOpen();
+		Connection preparation=connexion.connec();
 		try
 		{
 			PreparedStatement prepare = preparation.prepareStatement(TROUVERNOM) ;
@@ -142,16 +142,14 @@ public class ComputerDAO
 			{ 
 
 				String nom =resultat.getString("name");
-				Timestamp introduced = resultat.getTimestamp("introduced");
-				Timestamp discontinued = resultat.getTimestamp("discontinued");
+				Timestamp intro = resultat.getTimestamp("introduced");
+				Timestamp disco = resultat.getTimestamp("discontinued");
+				LocalDate introduced = intro.toLocalDateTime().toLocalDate();
+				LocalDate discontinued = disco.toLocalDateTime().toLocalDate();
 				Long company_id=resultat.getLong("company_id");
-				Computer comp = new Computer(null);
-				comp.setName(nom);
-				comp.setIntroduced(introduced);
-				comp.setDiscontinued(discontinued);
-				comp.setCompany_id(company_id);				
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setIdCompany(company_id).build();			
 
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany_id());
+				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getIdCompany());
 				if (comp.getName()!=null)
 				{
 					connexion.connexionClose();
@@ -175,14 +173,15 @@ public class ComputerDAO
 	public static void modifier(Long computer_id, String name, Timestamp introduced, Timestamp discontinued, Long company_id)
 	{
 		Connexion connexion = new Connexion();
-		Connection preparation = connexion.connexionOpen();
-		Computer comp = new Computer(null);
+		Connection preparation=connexion.connec();
+		Computer comp = new Computer.ComputerBuilder(name).build();
 		comp = trouverid(computer_id);
 		if (comp.getName()!=null)
 		{
 			try
 			{
 				PreparedStatement prepare =preparation.prepareStatement(MODIFIER);
+				
 				prepare.setString(1, name);
 				prepare.setTimestamp(2, introduced);
 				prepare.setTimestamp(3, introduced);
@@ -197,7 +196,7 @@ public class ComputerDAO
 				prepare.setLong(5, computer_id);
 				prepare.executeUpdate();
 				comp = trouverid(computer_id);
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany_id());
+				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getIdCompany());
 
 			}
 			catch (SQLException e)
@@ -210,9 +209,7 @@ public class ComputerDAO
 	public static void effacer(Long computer_id)
 	{
 		Connexion connexion = new Connexion();
-		Connection preparation = connexion.connexionOpen();
-		Computer comp = new Computer(null);
-		comp = trouverid(computer_id);
+		Connection preparation=connexion.connec();
 		try
 		{
 			PreparedStatement prepare = preparation.prepareStatement(EFFACER) ;
@@ -229,7 +226,7 @@ public class ComputerDAO
 	{
 
 		Connexion connexion = new Connexion();
-		Connection preparation= connexion.connexionOpen();
+		Connection preparation=connexion.connec();
 		try
 		{
 			PreparedStatement prepare = preparation.prepareStatement(CREER) ;
@@ -245,7 +242,7 @@ public class ComputerDAO
 				prepare.setNull(4, java.sql.Types.BIGINT);
 			}
 			prepare.executeUpdate();
-			Computer comp = new Computer(null);
+			Computer comp = new Computer.ComputerBuilder(name).build();
 			comp = trouvernom(name);
 			if (comp.getName()==null)
 			{

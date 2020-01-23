@@ -2,7 +2,7 @@ package com.excilys.cbd.dao;
 import java.sql.*;
 import java.util.ArrayList;
 
-import com.excilys.cbd.bdd.Company;
+import com.excilys.cbd.model.Company;
 
 public class CompanyDAO 
 {
@@ -51,7 +51,7 @@ public class CompanyDAO
 				Company compa = new Company(company_id,company_name);
 
 
-				System.out.println(compa.getCompany_id() + " " + compa.getName() + " ");
+				System.out.println(compa.getIdCompany() + " " + compa.getName() + " ");
 				return compa;
 			}
 		}
@@ -80,7 +80,7 @@ public class CompanyDAO
 				Company compa = new Company(company_id,company_name);
 
 
-				System.out.println(compa.getCompany_id() + " " + compa.getName() + " ");
+				System.out.println(compa.getIdCompany() + " " + compa.getName() + " ");
 				connexion.connexionClose();
 				return compa;
 			}
