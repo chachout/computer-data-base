@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="AddServlet" method="POST">
+                    <form action="AddServlet" method="POST" name = "addComputer">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -56,5 +56,8 @@
             </div>
         </div>
     </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+    <script src="js/frontValidation.js"></script>
 </body>
 </html>
