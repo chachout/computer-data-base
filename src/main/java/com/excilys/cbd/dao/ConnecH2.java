@@ -11,22 +11,23 @@ public class ConnecH2
 	String password = "qwerty1234";
 	String driver = "com.mysql.jdbc.Driver";
 	private static ConnecH2 instance;
-	private static Connection connexion;
+	//private static Connection connexion;
 	
+	private ConnecH2() { }
 	
-	
-	private ConnecH2() throws ClassNotFoundException
+	public Connection seConnecter() throws ClassNotFoundException
 	{
+		Connection connection = null;
 		try
 		{
 			if(isBlank(System.getProperty("test"))) {
 				Class.forName(driverh2);
-				connexion= DriverManager.getConnection(urlh2,userh2,passwordh2);
+				connection =  DriverManager.getConnection(urlh2,userh2,passwordh2);
 			}
 			else
-			{
+			{ 
 				Class.forName(driver);
-				connexion= DriverManager.getConnection(url,user,password);
+				connection =  DriverManager.getConnection(url,user,password);
 			}
 			
 		}
@@ -35,36 +36,28 @@ public class ConnecH2
 			System.out.print("La connexion à échouer");
 			e.printStackTrace();
 		}
+		return connection;
 	}
-	public static void connexionClose()
+	public void connectionClose(Connection connection)
 	{
-		if ( connexion != null )
+		if ( connection != null )
 		{
 			try 
 			{
-				connexion.close();
+				connection.close();
 			}
 			catch ( SQLException ignore ) 
 			{ 
 			}
 		}
 	}
-	private static ConnecH2 getConnec() throws ClassNotFoundException
+	public static ConnecH2 getConnec() throws ClassNotFoundException
 	{
 		if (instance ==null)
 		{
 			instance=new ConnecH2();
-			return instance;
 		}
-		else 
-		{
-			return instance;
-		}
-	}
-	public static Connection getConnexion() throws ClassNotFoundException
-	{
-		instance=getConnec();
-		return connexion;
+		return instance;
 	}
 	
 	public static boolean isBlank(String str) {

@@ -10,7 +10,7 @@ import com.excilys.cbd.dao.CompanyDAO;
 import com.excilys.cbd.dao.ComputerDAO;
 import com.excilys.cbd.model.Computer;
 
-import Logger.Logging;
+import com.excilys.cbd.Logger.Logging;
 
 public class InterfaceUtilisateur 
 {

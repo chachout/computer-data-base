@@ -1,13 +1,13 @@
 package com.excilys.cbd.model;
 import java.time.*;
-import java.sql.*;
+import com.excilys.cbd.model.Company;
 public class Computer
 {
 	private long idComputer;
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private long idCompany;
+	private Company compa;
 	/*public Computer(String name, LocalDate introduced, LocalDate discontinued, long idCompany) 
 	{
 		super();
@@ -58,7 +58,7 @@ public class Computer
 		this.name=builder.name;
 		this.introduced=builder.introduced;
 		this.discontinued=builder.discontinued;
-		this.idCompany=builder.idCompany;
+		this.compa=builder.compa;
 	}
 	public String getName() 
 	{
@@ -88,7 +88,7 @@ public class Computer
 				this.introduced = introduced;
 			}
 		}	
-	}
+	} 
 	public LocalDate getDiscontinued() 
 	{
 		return discontinued;
@@ -110,16 +110,13 @@ public class Computer
 			}
 		}
 	}
-	public long getIdCompany() 
+	public Company getCompany() 
 	{
-		return idCompany;
+		return compa;
 	}
-	public void setCompany_id(long idCompany) 
+	public void setCompany(Company compa) 
 	{
-		this.idCompany = idCompany;
-	}
-	public void setIdCompany(long idCompany) {
-		this.idComputer = idCompany;
+		this.compa=compa;
 	}
 	public static class ComputerBuilder
 	{
@@ -128,7 +125,7 @@ public class Computer
 		
 		private LocalDate introduced;
 		private LocalDate discontinued;
-		private long idCompany;
+		private Company compa;
 
 		public ComputerBuilder (String name)
 		{
@@ -144,9 +141,9 @@ public class Computer
 			this.discontinued=discontinued;
 			return this;
 		}
-		public ComputerBuilder setIdCompany(long idCompany)
+		public ComputerBuilder setCompany(Company compa)
 		{
-			this.idCompany=idCompany;
+			this.compa=compa;
 			return this;
 		}
 		public Computer build()

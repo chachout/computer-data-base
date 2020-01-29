@@ -3,16 +3,18 @@ package com.excilys.cbd.dao;
 import static org.junit.Assert.*;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.Month;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.cbd.model.Company;
 import com.excilys.cbd.model.Computer;
 
-import Logger.Logging;
+import com.excilys.cbd.Logger.Logging;
 
-public class CompanyDAOTest {
+public class ComputerDAOTest {
 
 	@Before
 	public void setUp() throws Exception 
@@ -31,12 +33,13 @@ public class CompanyDAOTest {
 	{
 		
 		String name = "MSI";
-		LocalDate introduced = null;
-		LocalDate discontinued = null;
+		LocalDate introduced = LocalDate.of(2014, Month.APRIL, 17);
+		LocalDate discontinued = LocalDate.of(2014, Month.APRIL, 17);
 		long company_id = 1;
-		Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setIdCompany(company_id).build();			
-		int addValue = ComputerDAO.creer(comp);
-		assertEquals(addValue, 1);
+		Company compa = CompanyDAO.getInstance().trouverCompany(company_id);
+		Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+		int addValue = ComputerDAO.getInstance().creer(comp);
+		assertNotEquals(addValue, 0);
 		
 	}
 	@Test
@@ -44,7 +47,8 @@ public class CompanyDAOTest {
 	{
 		Computer comp = null;
 		try {
-			comp = ComputerDAO.trouverid(624L);
+			comp = ComputerDAO.getInstance().trouverid(6L);
+			System.out.println(comp);
 			Logging.afficher("cc");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

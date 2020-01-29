@@ -1,22 +1,32 @@
 package com.excilys.cbd.model;
-import java.sql.*;
+
+import java.time.LocalDate;
+
+import com.excilys.cbd.model.Computer.ComputerBuilder;
+
 public class Company 
 {
-	Long id;
-	String name;
-	public Company(Long company_id, String name) 
+	private long id;
+	private String name;
+	private Company(CompanyBuilder builder) 
+	{
+		this.id=builder.id;
+		this.name=builder.name;
+	}
+	/*public Company(Long company_id, String name) 
 	{  
 		super();
 		this.id = company_id;
 		this.name = name;
 	}
-	public Long getCompany_id() 
+	*/
+	public Long getId() 
 	{
 		return id;
 	}
-	public void setCompany_id(Long company_id) 
+	public void setId(long id) 
 	{
-		this.id = company_id;
+		this.id = id;
 	}
 	public String getName() 
 	{
@@ -26,4 +36,34 @@ public class Company
 	{
 		this.name =name;
 	}
+	public static class CompanyBuilder
+	{
+		private long id;
+		private String name;
+		
+		public CompanyBuilder ()
+		{
+		}
+		public CompanyBuilder setId(long id)
+		{
+			this.id=id;
+			return this;
+		}
+		public CompanyBuilder setName(String name)
+		{
+			this.name=name;
+			return this;
+		}
+		public Company build()
+		{
+			return new Company(this);
+		}
+	}
+	@Override
+	public String toString() {
+		return "Company [id=" + id + ", name=" + name + "]";
+	}
+	
+	
+	
 }
