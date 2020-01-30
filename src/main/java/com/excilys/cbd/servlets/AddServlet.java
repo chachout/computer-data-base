@@ -8,6 +8,7 @@ import com.excilys.cbd.dto.*;
 import com.excilys.cbd.mapper.ComputerMapper;
 import com.excilys.cbd.model.Company;
 import com.excilys.cbd.model.Computer;
+import com.excilys.cbd.validation.ValidationBackComputer;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -56,22 +57,35 @@ public class AddServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		try {
-		String name = request.getParameter("computerName");
-		String introduced = request.getParameter("introduced");
-		String discontinued = request.getParameter("discontinued");
-		String company = request.getParameter("company");
-		CompanyDTO compaDTO =new CompanyDTO(company);
-		ComputerDTO compuDTO =new ComputerDTO(name,introduced,discontinued,compaDTO);
-		Computer comp = ComputerMapper.convertComputerDTOtoComputer(compuDTO);
 		
-			Optional<Computer> comput= ServiceComputer.getInstance().addComputer(comp);
-		} 
-		catch (ClassNotFoundException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			String name = request.getParameter("computerName");
+			String introduced = request.getParameter("introduced");
+			String discontinued = request.getParameter("discontinued");
+			String company = request.getParameter("company");
+			CompanyDTO compaDTO =new CompanyDTO(company);
+			ComputerDTO compuDTO =new ComputerDTO(name,introduced,discontinued,compaDTO);
+			Computer comp = ComputerMapper.convertComputerDTOtoComputer(compuDTO);
+			try
+			{
+				ValidationBackComputer.validationComputer(comp);
+				try
+				{
+					Optional<Computer> comput= ServiceComputer.getInstance().addComputer(comp);
+					request.getRequestDispatcher("ListServlet?page="+ request.getAttribute("maxPage")).forward(request,response);
+				}
+				catch (Exception e)
+				{
+				
+				}
+			}
+			catch (Exception e1)
+			{ 
+				//System.out.println("erreur d'entrée du formulaire");
+				String erreur = "La date d'introduction n'est pas antérieur à la date de disparition ou le nom n'est pas rempli. Merci de corriger";
+				request.setAttribute("erreur", erreur);
+				request.setAttribute("computerToAdd", comp);
+				doGet(request,response);
+			}
 		
 	}
 

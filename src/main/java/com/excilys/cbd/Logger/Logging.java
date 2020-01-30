@@ -9,6 +9,6 @@ public class Logging
 	public static void afficher(String msg)
 	{
 		PropertyConfigurator.configure(Logging.class.getClassLoader().getResource("log4j.properties"));
-		log.info(msg);
+		log.error(msg);
 	}
 }

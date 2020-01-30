@@ -44,10 +44,10 @@ public class CompanyDAO
 			{ 
 				String name =resultat.getString("name");
 				long id=resultat.getLong("id");
-				System.out.println(name + id);
+				//System.out.println(name + id);
 				Company compa = new Company.CompanyBuilder().setId(id).setName(name).build();
 				listCompany.add(compa);
-				System.out.println(compa.getName()+" "+compa.getId());
+				//System.out.println(compa.getName()+" "+compa.getId());
 			}
 			ConnecH2.getConnec().connectionClose(preparation);
 			return listCompany;
@@ -72,7 +72,7 @@ public class CompanyDAO
 				long idCompany = resultat.getLong("id");
 				String name = resultat.getString("name");
 				compa = new Company.CompanyBuilder().setId(idCompany).setName(name).build();
-				System.out.println(compa.getId() + " " + compa.getName() + " ");
+				//System.out.println(compa.getId() + " " + compa.getName() + " ");
 			}
 			ConnecH2.getConnec().connectionClose(preparation);
 			return compa;
@@ -101,7 +101,7 @@ public class CompanyDAO
 				Company compa = new Company.CompanyBuilder().setId(id).setName(nameCompany).build();
 
 
-				System.out.println(compa.getId() + " " + compa.getName() + " ");
+				//System.out.println(compa.getId() + " " + compa.getName() + " ");
 				ConnecH2.getConnec().connectionClose(preparation);
 				return compa;
 			}

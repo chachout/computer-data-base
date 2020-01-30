@@ -99,7 +99,7 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-                <c:if test="${page>0}">
+                <c:if test="${page>1}">
                 <li>
                     <a href="ListServlet?page=${page-1}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
@@ -108,11 +108,11 @@
               </c:if>
               <c:forEach var="i" begin="1" end="5">
 	             
-              <li><a href="ListServlet?page=${page+1}"><c:out value="${page+i}"></c:out></a></li>
+              <li><a href="ListServlet?page=${page+i-1}"><c:out value="${page+i-1}"></c:out></a></li>
      		 </c:forEach>
               <c:if test="${page<maxPage}">
               <li>
-                <a href="ListServlet?page=${page+1}" aria-label="Next">
+                <a href="ListServlet?page=${page+5}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

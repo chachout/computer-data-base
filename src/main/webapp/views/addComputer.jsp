@@ -26,25 +26,28 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" name="computerName" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" name="computerName" id="computerName" value="${computerToAdd.name}" placeholder="Computer name">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" name="introduced" id="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" name="introduced" id="introduced" value="${computerToAdd.introduced}" placeholder="Introduced date">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" name="discontinued" id="discontinued" value="${computerToAdd.discontinued}" placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
                                 <label for="company">Company</label>
-                                <select class="form-control" name="company" id="company" >
+                                <select class="form-control" name="company" id="company" value="${computerToAdd.company.name}" >
                                   <c:forEach var="company" items="${listCompany}">
                                     <option value="${company.id}"><c:out value = "${company.name}"/></option>
                                   </c:forEach>
                                 </select>
                             </div>                  
                         </fieldset>
+                        <div  class="form-group">
+                        <c:out value ="${erreur}"></c:out>
+                        </div>
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                            

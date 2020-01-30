@@ -71,8 +71,8 @@ public class InterfaceUtilisateur
 			{
 				company_id = new Long(id_company);
 			}
-			Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setIdCompany(company_id).build();			 
-			ComputerDAO.creer(comp);
+			//Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setIdCompany(company_id).build();			 
+			//ComputerDAO.creer(comp);
 		}
 		else
 		{

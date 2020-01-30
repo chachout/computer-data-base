@@ -159,7 +159,7 @@ public class ComputerDAO
 				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
 
 
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
 				if (comp.getName()!=null)
 				{
 					listComputer.add(comp);
@@ -205,7 +205,7 @@ public class ComputerDAO
 				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
 
 
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
 				if (comp.getName()!=null)
 				{
 					return comp;
@@ -213,7 +213,7 @@ public class ComputerDAO
 				
 				else
 				{
-					System.out.println("Il n'y a pas d'ordinateur avec cet id");
+					//System.out.println("Il n'y a pas d'ordinateur avec cet id");
 					return null;
 				}
 			}
@@ -256,14 +256,14 @@ public class ComputerDAO
 				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
 
 
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
 				if (comp.getName()!=null)
 				{
 					return comp;
 				}
 				else
 				{
-					System.out.println("Il n'y a pas d'ordinateur avec ce nom");
+					//System.out.println("Il n'y a pas d'ordinateur avec ce nom");
 					return null;
 				}
 			}
@@ -299,7 +299,7 @@ public class ComputerDAO
 				prepare.setLong(5, computer_id);
 				prepare.executeUpdate();
 				comp = trouverid(computer_id);
-				System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
 
 			}
 			catch (SQLException e)

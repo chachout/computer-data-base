@@ -48,10 +48,12 @@ public class ListServlet extends HttpServlet {
 		try 
 		{
 			maxPage=ServiceComputer.getInstance().getCount()/taillePage;
-			if (request.getParameter("page")!=null)
+			//System.out.println(taillePage);
+			if (request.getParameter("page")!=null)	
 			{
+				//System.out.println(request.getParameter("page"));
 				page=Integer.parseInt(request.getParameter("page"));
-				if (page+1==maxPage)
+				if (page==maxPage)
 				{
 					ArrayList<Computer> computerList=ServiceComputer.getInstance().getComputerListPaginer(ServiceComputer.getInstance().getCount()%10,page+1);
 					request.setAttribute("listComput", computerList); 
@@ -72,7 +74,7 @@ public class ListServlet extends HttpServlet {
 			}
 			else
 			{
-				page=0;
+				page=1;
 				ArrayList<Computer> computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,0);
 				request.setAttribute("listComput", computerList);
 				request.setAttribute("page",page);
