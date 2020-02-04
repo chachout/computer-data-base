@@ -21,6 +21,7 @@ public class ListServlet extends HttpServlet {
 	public int page;
 	public int taillePage;
 	public int maxPage;
+	public int totalComputer;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -47,7 +48,9 @@ public class ListServlet extends HttpServlet {
 		}	
 		try 
 		{
-			maxPage=ServiceComputer.getInstance().getCount()/taillePage;
+			totalComputer=ServiceComputer.getInstance().getCount();
+			maxPage=totalComputer/taillePage;
+			ArrayList<Computer> computerList;
 			//System.out.println(taillePage);
 			if (request.getParameter("page")!=null)	
 			{
@@ -55,34 +58,25 @@ public class ListServlet extends HttpServlet {
 				page=Integer.parseInt(request.getParameter("page"));
 				if (page==maxPage)
 				{
-					ArrayList<Computer> computerList=ServiceComputer.getInstance().getComputerListPaginer(ServiceComputer.getInstance().getCount()%10,page*taillePage);
-					request.setAttribute("listComput", computerList); 
-					request.setAttribute("page",page);
-					request.setAttribute("maxPage", maxPage);
-					request.setAttribute("taillePage", taillePage);
-					request.getRequestDispatcher("views/dashboard.jsp").forward(request,response);
-				}
+					computerList=ServiceComputer.getInstance().getComputerListPaginer(ServiceComputer.getInstance().getCount()%10,page*taillePage);
+				}	
 				else
 				{
-					ArrayList<Computer> computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,page*taillePage);
-					request.setAttribute("listComput", computerList); 
-					request.setAttribute("page",page);
-					request.setAttribute("maxPage", maxPage);
-					request.setAttribute("taillePage", taillePage);
-					request.getRequestDispatcher("views/dashboard.jsp").forward(request,response);
+					computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,page*taillePage);
+					
 				}
 			}
 			else
 			{
 				page=1;
-				ArrayList<Computer> computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,0);
-				request.setAttribute("listComput", computerList);
-				request.setAttribute("page",page);
-				request.setAttribute("maxPage", maxPage);
-				request.setAttribute("taillePage", taillePage);
-				request.getRequestDispatcher("views/dashboard.jsp").forward(request,response);
+				computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,0);
 			}
-			
+			request.setAttribute("totalComputer", totalComputer);
+			request.setAttribute("listComput", computerList); 
+			request.setAttribute("page",page);
+			request.setAttribute("maxPage", maxPage);
+			request.setAttribute("taillePage", taillePage);
+			request.getRequestDispatcher("views/dashboard.jsp").forward(request,response);
 		}
 		catch (ClassNotFoundException e) 
 		{
