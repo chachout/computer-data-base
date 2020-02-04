@@ -96,6 +96,25 @@ public class ListServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		String idAttacher = request.getParameter("selection");
+		//System.out.println(request.getParameter("page"));
+		String[] listId = idAttacher.split(",");
+		
+		for (int i=0;i<listId.length;i++)
+		{
+			//System.out.println(listId[i]);
+			try 
+			{
+				ServiceComputer.getInstance().deleteComputer(Long.parseLong(listId[i]));
+			} 
+			catch (NumberFormatException | ClassNotFoundException e) 
+			{	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//request.setAttribute("page",request.getParameter("page"));
 		doGet(request, response);
 	}
 

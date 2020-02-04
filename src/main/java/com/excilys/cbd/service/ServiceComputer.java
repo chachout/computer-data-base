@@ -56,12 +56,16 @@ public class ServiceComputer
 	}
 	public void editComputer(Computer comp) throws ClassNotFoundException
 	{
-		System.out.println(comp+"Service");
+		//System.out.println(comp+"Service");
 		ComputerDAO.getInstance().modifier(comp);
 	}
 	public Computer findComputerById(Long id) throws ClassNotFoundException
 	{
 		Computer comp = ComputerDAO.getInstance().trouverid(id);
 		return comp;
+	}
+	public void deleteComputer(long id) throws ClassNotFoundException
+	{
+		ComputerDAO.getInstance().effacer(id);
 	}
 }

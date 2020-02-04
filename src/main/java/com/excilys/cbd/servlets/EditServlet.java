@@ -71,7 +71,7 @@ public class EditServlet extends HttpServlet {
 		ComputerDTO compuDTO =new ComputerDTO(name,introduced,discontinued,compaDTO);
 		compuDTO.setIdComputer(id);
 		Computer comp = ComputerMapper.convertComputerDTOtoComputer(compuDTO);
-		System.out.println(comp+"Servlet");
+		//System.out.println(comp+"Servlet");
 		try 
 		{
 			ServiceComputer.getInstance().editComputer(comp);

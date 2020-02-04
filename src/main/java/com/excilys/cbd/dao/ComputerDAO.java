@@ -323,21 +323,22 @@ public class ComputerDAO
 		ComputerDAO.connexionClose(preparation);
 		return value;
 	}
-	public void effacer(long computer_id) throws ClassNotFoundException
+	public int effacer(long computerId) throws ClassNotFoundException
 	{
+		int value = 0;
 		Connection preparation = ComputerDAO.connexionOpen();
 		try
 		{
 			PreparedStatement prepare = preparation.prepareStatement(EFFACER) ;
-			prepare.setLong(1, computer_id);
-			prepare.executeUpdate();
+			prepare.setLong(1, computerId);
+			value=prepare.executeUpdate();
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
 		ComputerDAO.connexionClose(preparation);
-		
+		return value;
 	}
 	public int creer(Computer comp) throws ClassNotFoundException
 	{
