@@ -68,4 +68,10 @@ public class ServiceComputer
 	{
 		ComputerDAO.getInstance().effacer(id);
 	}
+	public ArrayList<Computer> findComputerByName(String name) throws ClassNotFoundException
+	{
+		ArrayList<Computer> computerList=ComputerDAO.getInstance().trouvernom(name);
+		//System.out.println(computerList+"Service");
+		return computerList;
+	}
 }

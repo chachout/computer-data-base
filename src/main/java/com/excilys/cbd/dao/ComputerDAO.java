@@ -14,7 +14,7 @@ public class ComputerDAO
 	public static String TOUTCOMPU = "SELECT * FROM computer";
 	public static String PAGINATION =  "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id LIMIT ?, ?";
 	public static String TROUVERID = "SELECT * FROM computer WHERE id = ?";
-	public static String TROUVERNOM = "SELECT * FROM computer WHERE name = ?";
+	public static String TROUVERNOM = "SELECT  computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? OR introduced LIKE ? OR discontinued LIKE ?;";
 	public static String MODIFIER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	public static String EFFACER = "DELETE FROM computer WHERE id = ?";
 	private ComputerDAO()
@@ -229,18 +229,24 @@ public class ComputerDAO
 		}
 		return null;
 	}
-	public Computer trouvernom (String name) throws ClassNotFoundException
+	public ArrayList<Computer> trouvernom (String recherche) throws ClassNotFoundException
 	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
 		try
 		{
 			Connection preparation = ComputerDAO.connexionOpen();
 			PreparedStatement prepare = preparation.prepareStatement(TROUVERNOM) ;
-			prepare.setString(1,name);
+			recherche=recherche.toLowerCase();
+			recherche="%"+recherche+"%";
+			prepare.setString(1,recherche);
+			prepare.setString(2,recherche);
+			prepare.setString(3,recherche);
+			prepare.setString(4,recherche);
 			ResultSet resultat=prepare.executeQuery();
 			while (resultat.next())
 			{ 
 
-				String nom =resultat.getString("name");
+				String name =resultat.getString("computer_name");
 				Date intro = resultat.getDate("introduced");
 				Date disco = resultat.getDate("discontinued");
 				LocalDate introduced = LocalDate.now();
@@ -254,22 +260,21 @@ public class ComputerDAO
 				{
 					discontinued =disco.toLocalDate();
 				}
-				long company_id=resultat.getLong("company_id");
-				
-				Company compa = CompanyDAO.getInstance().trouverCompany(company_id);
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
 				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
-
-
-				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
-				if (comp.getName()!=null)
-				{
-					return comp;
-				}
-				else
-				{
-					//System.out.println("Il n'y a pas d'ordinateur avec ce nom");
-					return null;
-				}
+				comp.setId(id);
+//				if (comp.getName()!=null)
+//				{
+//					return comp;
+//				}
+//				else
+//				{
+//					//System.out.println("Il n'y a pas d'ordinateur avec ce nom");
+//					return null;
+//				}
+				listComputer.add(comp);
 			}
 			ComputerDAO.connexionClose(preparation);
 		}
@@ -277,7 +282,7 @@ public class ComputerDAO
 		{
 			e.printStackTrace();
 		}
-		return null;
+		return listComputer;
 	}
 	public int modifier(Computer comp) throws ClassNotFoundException
 	{

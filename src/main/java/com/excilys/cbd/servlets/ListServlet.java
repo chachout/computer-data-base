@@ -36,53 +36,71 @@ public class ListServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-	
-		
-		if (request.getParameter("taillePage")!=null)
+		ArrayList<Computer> computerList=null;
+		System.out.println(request.getParameter("search"));
+		if (request.getParameter("search")==null||request.getParameter("search")=="")
 		{
-			taillePage=Integer.parseInt(request.getParameter("taillePage"));
-		}
-		else
-		{
-			taillePage=10;
-		}	
-		try 
-		{
-			totalComputer=ServiceComputer.getInstance().getCount();
-			maxPage=totalComputer/taillePage;
-			ArrayList<Computer> computerList;
-			//System.out.println(taillePage);
-			if (request.getParameter("page")!=null)	
+			if (request.getParameter("taillePage")!=null)
 			{
-				//System.out.println(request.getParameter("page"));
-				page=Integer.parseInt(request.getParameter("page"));
-				if (page==maxPage)
-				{
-					computerList=ServiceComputer.getInstance().getComputerListPaginer(ServiceComputer.getInstance().getCount()%10,page*taillePage);
-				}	
-				else
-				{
-					computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,page*taillePage);
-					
-				}
+				taillePage=Integer.parseInt(request.getParameter("taillePage"));
 			}
 			else
 			{
-				page=1;
-				computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,0);
+				taillePage=10;
+			}	
+			try 
+			{
+				totalComputer=ServiceComputer.getInstance().getCount();
+				maxPage=totalComputer/taillePage;
+				//System.out.println(taillePage);
+				if (request.getParameter("page")!=null)	
+				{
+					//System.out.println(request.getParameter("page"));
+					page=Integer.parseInt(request.getParameter("page"));
+					if (page==maxPage)
+					{
+						computerList=ServiceComputer.getInstance().getComputerListPaginer(ServiceComputer.getInstance().getCount()%10,page*taillePage);
+					}	
+					else
+					{
+						computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,page*taillePage);
+						
+					}
+				}
+				else
+				{
+					page=1;
+					computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,0);
+				}
+				request.setAttribute("page",page);
+				request.setAttribute("maxPage", maxPage);
+				request.setAttribute("taillePage", taillePage);
 			}
-			request.setAttribute("totalComputer", totalComputer);
-			request.setAttribute("listComput", computerList); 
-			request.setAttribute("page",page);
-			request.setAttribute("maxPage", maxPage);
-			request.setAttribute("taillePage", taillePage);
-			request.getRequestDispatcher("views/dashboard.jsp").forward(request,response);
+			catch (ClassNotFoundException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		catch (ClassNotFoundException e) 
+		else
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String search = request.getParameter("search");
+			try 
+			{
+				computerList=ServiceComputer.getInstance().findComputerByName(search);
+				//System.out.println(computerList);
+				totalComputer=computerList.size();
+			} 
+			catch (ClassNotFoundException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
+		request.setAttribute("totalComputer", totalComputer);
+		request.setAttribute("listComput", computerList); 
+		request.getRequestDispatcher("views/dashboard.jsp").forward(request,response);
 	}
 
 	/**
