@@ -1,5 +1,6 @@
 package com.excilys.cbd.utilisateur;
 import java.util.Date;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,14 +17,14 @@ import com.excilys.cbd.Logger.Logging;
 
 public class InterfaceUtilisateur 
 {
-	public static void AfficherInterface() throws ParseException, ClassNotFoundException
+	public static void AfficherInterface() throws ParseException, ClassNotFoundException, SQLException
 	{
 		System.out.println("\t\t\t\t\t\tBonjour");
 		System.out.println("\n\t\t\t\t\tQue souhaitez-vous faire ?");
 		System.out.println("\t\t\t\tEntrez le chiffre correspondant � votre demande");
 		System.out.println("\n\t\t\t1.Add a computer");
 		System.out.println("\t\t\t2.Update computer by id");
-		System.out.println("\t\t\t3.Find a computer by id");
+		System.out.println("\t\t\t3.Delete a company by id");
 		System.out.println("\t\t\t4.Find a computer by name");
 		System.out.println("\t\t\t5.Display all computers");
 		System.out.println("\t\t\t6.Display all companies");
@@ -128,9 +129,9 @@ public class InterfaceUtilisateur
 			{
 				if (i==3)
 				{
-					System.out.println("\n\t\t\tEntrez l'id du computer que vous voulez trouvez : ");
-					Long computerId= clavier.nextLong();
-					//ServiceComputer.getInstance().getComputer(computerId);
+					System.out.println("\n\t\t\tEntrez l'id du computer que vous voulez supprimer : ");
+					Long companyId= clavier.nextLong();
+					ServiceCompany.getInstance().getDeleteCompany(companyId);
 				}
 				else
 				{

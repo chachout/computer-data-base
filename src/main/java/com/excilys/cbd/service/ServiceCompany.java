@@ -1,5 +1,6 @@
 package com.excilys.cbd.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.excilys.cbd.dao.CompanyDAO;
@@ -33,7 +34,11 @@ public class ServiceCompany
 	}
 	public Company getCompany(Long id) throws ClassNotFoundException
 	{
-	  Company compa = CompanyDAO.getInstance().trouverCompany(id);
-	  return compa;
+		Company compa = CompanyDAO.getInstance().trouverCompany(id);
+		return compa;
+	}
+	public void getDeleteCompany(Long id) throws ClassNotFoundException, SQLException
+	{
+		CompanyDAO.getInstance().effacer(id);
 	}
 }

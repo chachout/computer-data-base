@@ -74,4 +74,44 @@ public class ServiceComputer
 		//System.out.println(computerList+"Service");
 		return computerList;
 	}
+	public ArrayList<Computer> getListOrderComputNameAsc(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComput=computerDao.pageTrierNomComputerAscendant(limit, offset);
+		return listComput;
+	}
+	public ArrayList<Computer> getListOrderComputNameDes(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComput=computerDao.pageTrierNomComputerDescendant(limit, offset);
+		return listComput;
+	}
+	public ArrayList<Computer> getListOrderIntroAsc(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComput=computerDao.pageTrierIntroducedAscendant(limit, offset);
+		return listComput;
+	}
+	public ArrayList<Computer> getListOrderIntroDes(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComput=computerDao.pageTrierIntroducedDescendant(limit, offset);
+		return listComput;
+	}
+	public ArrayList<Computer> getListOrderDiscoAsc(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComput=computerDao.pageTrierDiscontinuedAscendant(limit, offset);
+		return listComput;
+	}
+	public ArrayList<Computer> getListOrderDiscoDes(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComput=computerDao.pageTrierDiscontinuedDescendant(limit, offset);
+		return listComput;
+	}
+	public ArrayList<Computer> getListOrderCompaNameAsc(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComput=computerDao.pageTrierNomCompanyAscendant(limit, offset);
+		return listComput;
+	}
+	public ArrayList<Computer> getListOrderCompaNameDes(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComput=computerDao.pageTrierNomCompanyDescendant(limit, offset);
+		return listComput;
+	}
 }

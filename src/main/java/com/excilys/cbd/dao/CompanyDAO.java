@@ -3,12 +3,14 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import com.excilys.cbd.model.Company;
+import com.excilys.cbd.model.Computer;
 
 public class CompanyDAO 
 {
 	public static String TROUVERCOMPAID = "SELECT * FROM company WHERE id = ?";
 	public static String TROUVERCOMPANOM = "SELECT * FROM company WHERE name = ?";
 	public static String TOUTCOMPA = "SELECT * FROM company";
+	public static String EFFACER = "DELETE FROM company WHERE id = ?";
 	private static CompanyDAO instance;
 	private CompanyDAO()
 	{
@@ -113,5 +115,43 @@ public class CompanyDAO
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public int effacer(long companyId) throws ClassNotFoundException, SQLException
+	{
+		int value = 0;
+		//preparation.setAutoCommit(false);
+		try 
+		{
+			System.out.println("1");
+			Connection preparation = CompanyDAO.connexionOpen();
+			System.out.println("2"); 
+			PreparedStatement prepare = preparation.prepareStatement(ComputerDAO.EFFACERPARCOMPA) ;
+			prepare.setLong(1, companyId);
+			value=prepare.executeUpdate();
+			if (value >0)
+			{
+				prepare = preparation.prepareStatement(EFFACER) ;
+				prepare.setLong(1, companyId);
+				value=prepare.executeUpdate();
+				if (value==1)
+				{
+					//preparation.commit();
+				}
+				else
+				{
+					//preparation.rollback();
+				}
+			}
+			else
+			{
+				//preparation.rollback();
+			}
+			CompanyDAO.connexionClose(preparation);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return value;
 	}
 }

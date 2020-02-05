@@ -6,7 +6,8 @@ public class ConnecH2
 	String userh2 = "pi";
 	String passwordh2 = "";
 	String driverh2 = "org.h2.Driver";
-	String url = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+	//String url = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+	String url = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false";
 	String user = "root";
 	String password = "qwerty1234";
 	String driver = "com.mysql.jdbc.Driver";
@@ -20,12 +21,13 @@ public class ConnecH2
 		Connection connection = null;
 		try
 		{
-			if(isBlank(System.getProperty("test"))) {
+			if(isBlank(System.getProperty("test"))) { 
 				Class.forName(driverh2);
-				connection =  DriverManager.getConnection(urlh2,userh2,passwordh2);
-			}
+				connection =  DriverManager.getConnection(urlh2,userh2,passwordh2);			}
 			else
 			{ 
+				//System.out.println(driver+"\n"+url+"\n"+user+"\n"+password);
+
 				Class.forName(driver);
 				connection =  DriverManager.getConnection(url,user,password);
 			}

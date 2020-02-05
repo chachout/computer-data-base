@@ -17,10 +17,19 @@ public class ComputerDAO
 	public static String TROUVERNOM = "SELECT  computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? OR introduced LIKE ? OR discontinued LIKE ?;";
 	public static String MODIFIER = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	public static String EFFACER = "DELETE FROM computer WHERE id = ?";
+	public static String EFFACERPARCOMPA = "DELETE FROM computer WHERE company_id = ?";
+	public static String TRINOMCOMPUTASC = "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ORDER BY computer_name ASC LIMIT ?, ?";
+	public static String TRINOMCOMPUTDES = "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ORDER BY computer_name DESC LIMIT ?, ?";
+	public static String TRIINTROASC = "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ORDER BY introduced ASC LIMIT ?, ?";
+	public static String TRIINTRODES = "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ORDER BY introduced DESC LIMIT ?, ?";
+	public static String TRIDISCOASC = "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ORDER BY discontinued ASC LIMIT ?, ?";
+	public static String TRIDISCODES = "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ORDER BY discontinued DESC LIMIT ?, ?";
+	public static String TRINOMCOMPAASC = "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ORDER BY company_name ASC LIMIT ?, ?";
+	public static String TRINOMCOMPADES = "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ORDER BY company_name DESC LIMIT ?, ?";
 	private ComputerDAO()
 	{
 	}
-	private static ComputerDAO instance;
+	private static ComputerDAO instance; 
 	public static ComputerDAO getInstance()
 	{
 		if (instance == null)
@@ -345,6 +354,23 @@ public class ComputerDAO
 		ComputerDAO.connexionClose(preparation);
 		return value;
 	}
+	public int effacerComputIdCompany(long companyId) throws ClassNotFoundException
+	{
+		int value = 0;
+		Connection preparation = ComputerDAO.connexionOpen();
+		try
+		{
+			PreparedStatement prepare = preparation.prepareStatement(EFFACERPARCOMPA) ;
+			prepare.setLong(1, companyId);
+			value=prepare.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		ComputerDAO.connexionClose(preparation);
+		return value;
+	}
 	public int creer(Computer comp) throws ClassNotFoundException
 	{
 		Connection preparation = ComputerDAO.connexionOpen();
@@ -384,5 +410,373 @@ public class ComputerDAO
 		}
 		ComputerDAO.connexionClose(preparation);
 		return value;
+	}
+	public ArrayList<Computer> pageTrierNomComputerAscendant(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
+		try
+		{
+			Connection preparation = ComputerDAO.connexionOpen();
+			PreparedStatement prepare = preparation.prepareStatement(TRINOMCOMPUTASC);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
+			ResultSet resultat=prepare.executeQuery();
+			while (resultat.next())
+			{ 
+				String name =resultat.getString("computer_name");
+				Date intro = resultat.getDate("introduced");
+				Date disco = resultat.getDate("discontinued");
+				LocalDate introduced = null;
+				if (intro!=null)
+				{
+					introduced =intro.toLocalDate();
+				}
+				LocalDate discontinued = null;
+				if (disco!=null)
+				{
+					discontinued = disco.toLocalDate();
+				}
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+				comp.setId(id);
+
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				if (comp.getName()!=null)
+				{
+					listComputer.add(comp);
+				}
+			}
+			ComputerDAO.connexionClose(preparation);
+			return listComputer;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<Computer> pageTrierNomComputerDescendant(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
+		try
+		{
+			Connection preparation = ComputerDAO.connexionOpen();
+			PreparedStatement prepare = preparation.prepareStatement(TRINOMCOMPUTDES);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
+			ResultSet resultat=prepare.executeQuery();
+			while (resultat.next())
+			{ 
+				String name =resultat.getString("computer_name");
+				Date intro = resultat.getDate("introduced");
+				Date disco = resultat.getDate("discontinued");
+				LocalDate introduced = null;
+				if (intro!=null)
+				{
+					introduced =intro.toLocalDate();
+				}
+				LocalDate discontinued = null;
+				if (disco!=null)
+				{
+					discontinued = disco.toLocalDate();
+				}
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+				comp.setId(id);
+
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				if (comp.getName()!=null)
+				{
+					listComputer.add(comp);
+				}
+			}
+			ComputerDAO.connexionClose(preparation);
+			return listComputer;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<Computer> pageTrierIntroducedAscendant(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
+		try
+		{
+			Connection preparation = ComputerDAO.connexionOpen();
+			PreparedStatement prepare = preparation.prepareStatement(TRIINTROASC);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
+			ResultSet resultat=prepare.executeQuery();
+			while (resultat.next())
+			{ 
+				String name =resultat.getString("computer_name");
+				Date intro = resultat.getDate("introduced");
+				Date disco = resultat.getDate("discontinued");
+				LocalDate introduced = null;
+				if (intro!=null)
+				{
+					introduced =intro.toLocalDate();
+				}
+				LocalDate discontinued = null;
+				if (disco!=null)
+				{
+					discontinued = disco.toLocalDate();
+				}
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+				comp.setId(id);
+
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				if (comp.getName()!=null)
+				{
+					listComputer.add(comp);
+				}
+			}
+			ComputerDAO.connexionClose(preparation);
+			return listComputer;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<Computer> pageTrierIntroducedDescendant(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
+		try
+		{
+			Connection preparation = ComputerDAO.connexionOpen();
+			PreparedStatement prepare = preparation.prepareStatement(TRIINTRODES);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
+			ResultSet resultat=prepare.executeQuery();
+			while (resultat.next())
+			{ 
+				String name =resultat.getString("computer_name");
+				Date intro = resultat.getDate("introduced");
+				Date disco = resultat.getDate("discontinued");
+				LocalDate introduced = null;
+				if (intro!=null)
+				{
+					introduced =intro.toLocalDate();
+				}
+				LocalDate discontinued = null;
+				if (disco!=null)
+				{
+					discontinued = disco.toLocalDate();
+				}
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+				comp.setId(id);
+
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				if (comp.getName()!=null)
+				{
+					listComputer.add(comp);
+				}
+			}
+			ComputerDAO.connexionClose(preparation);
+			return listComputer;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<Computer> pageTrierDiscontinuedAscendant(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
+		try
+		{
+			Connection preparation = ComputerDAO.connexionOpen();
+			PreparedStatement prepare = preparation.prepareStatement(TRIDISCOASC);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
+			ResultSet resultat=prepare.executeQuery();
+			while (resultat.next())
+			{ 
+				String name =resultat.getString("computer_name");
+				Date intro = resultat.getDate("introduced");
+				Date disco = resultat.getDate("discontinued");
+				LocalDate introduced = null;
+				if (intro!=null)
+				{
+					introduced =intro.toLocalDate();
+				}
+				LocalDate discontinued = null;
+				if (disco!=null)
+				{
+					discontinued = disco.toLocalDate();
+				}
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+				comp.setId(id);
+
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				if (comp.getName()!=null)
+				{
+					listComputer.add(comp);
+				}
+			}
+			ComputerDAO.connexionClose(preparation);
+			return listComputer;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<Computer> pageTrierDiscontinuedDescendant(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
+		try
+		{
+			Connection preparation = ComputerDAO.connexionOpen();
+			PreparedStatement prepare = preparation.prepareStatement(TRIDISCODES);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
+			ResultSet resultat=prepare.executeQuery();
+			while (resultat.next())
+			{ 
+				String name = resultat.getString("computer_name");
+				Date intro = resultat.getDate("introduced");
+				Date disco = resultat.getDate("discontinued");
+				LocalDate introduced = null;
+				if (intro!=null)
+				{
+					introduced =intro.toLocalDate();
+				}
+				LocalDate discontinued = null;
+				if (disco!=null)
+				{
+					discontinued = disco.toLocalDate();
+				}
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+				comp.setId(id);
+
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				if (comp.getName()!=null)
+				{
+					listComputer.add(comp);
+				}
+			}
+			ComputerDAO.connexionClose(preparation);
+			return listComputer;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<Computer> pageTrierNomCompanyAscendant(int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
+		try
+		{
+			Connection preparation = ComputerDAO.connexionOpen();
+			PreparedStatement prepare = preparation.prepareStatement(TRINOMCOMPAASC);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
+			ResultSet resultat=prepare.executeQuery();
+			while (resultat.next())
+			{ 
+				String name =resultat.getString("computer_name");
+				Date intro = resultat.getDate("introduced");
+				Date disco = resultat.getDate("discontinued");
+				LocalDate introduced = null;
+				if (intro!=null)
+				{
+					introduced =intro.toLocalDate();
+				}
+				LocalDate discontinued = null;
+				if (disco!=null)
+				{
+					discontinued = disco.toLocalDate();
+				}
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+				comp.setId(id);
+
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				if (comp.getName()!=null)
+				{
+					listComputer.add(comp);
+				}
+			}
+			ComputerDAO.connexionClose(preparation);
+			return listComputer;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public ArrayList<Computer> pageTrierNomCompanyDescendant (int limit, int offset) throws ClassNotFoundException
+	{
+		ArrayList<Computer> listComputer= new ArrayList<Computer>();
+		try
+		{
+			Connection preparation = ComputerDAO.connexionOpen();
+			PreparedStatement prepare = preparation.prepareStatement(TRINOMCOMPADES);
+			prepare.setInt(2, limit);
+			prepare.setInt(1, offset);
+			ResultSet resultat=prepare.executeQuery();
+			while (resultat.next())
+			{ 
+				String name =resultat.getString("computer_name");
+				Date intro = resultat.getDate("introduced");
+				Date disco = resultat.getDate("discontinued");
+				LocalDate introduced = null;
+				if (intro!=null)
+				{
+					introduced =intro.toLocalDate();
+				}
+				LocalDate discontinued = null;
+				if (disco!=null)
+				{
+					discontinued = disco.toLocalDate();
+				}
+				String companyName=resultat.getString("company_name");
+				Company compa = new Company.CompanyBuilder().setName(companyName).build();
+				long id =resultat.getLong("computer_id");
+				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
+				comp.setId(id);
+
+				//System.out.println(comp.getName() + " " + comp.getIntroduced() + " " + comp.getDiscontinued() + " " + comp.getCompany());
+				if (comp.getName()!=null)
+				{
+					listComputer.add(comp);
+				}
+			}
+			ComputerDAO.connexionClose(preparation);
+			return listComputer;
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

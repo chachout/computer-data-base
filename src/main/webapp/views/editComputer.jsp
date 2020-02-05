@@ -56,7 +56,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">
                             or
-                            <a href="ListComputer" class="btn btn-default">Cancel</a>
+                            <a href="ListServlet" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

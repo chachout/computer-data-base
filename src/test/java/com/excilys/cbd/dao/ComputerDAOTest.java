@@ -34,7 +34,7 @@ public class ComputerDAOTest {
 		
 		String name = "MSI";
 		LocalDate introduced = LocalDate.of(2014, Month.APRIL, 17);
-		LocalDate discontinued = LocalDate.of(2014, Month.APRIL, 17);
+		LocalDate discontinued = LocalDate.of(2016, Month.JUNE, 26);
 		long company_id = 1;
 		Company compa = CompanyDAO.getInstance().trouverCompany(company_id);
 		Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
@@ -47,7 +47,7 @@ public class ComputerDAOTest {
 	{
 		Computer comp = null;
 		try {
-			comp = ComputerDAO.getInstance().trouverid(6L);
+			comp = ComputerDAO.getInstance().trouverid(6);
 			System.out.println(comp);
 			Logging.afficher("cc");
 		} catch (ClassNotFoundException e) {
