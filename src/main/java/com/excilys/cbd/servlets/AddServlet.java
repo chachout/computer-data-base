@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cbd.dto.CompanyDTO;
 import com.excilys.cbd.dto.ComputerDTO;
+import com.excilys.cbd.exceptions.DateException;
+import com.excilys.cbd.exceptions.NameException;
 import com.excilys.cbd.mapper.ComputerMapper;
 import com.excilys.cbd.model.Company;
 import com.excilys.cbd.model.Computer;
@@ -70,30 +72,35 @@ public class AddServlet extends HttpServlet {
 			CompanyDTO compaDTO =new CompanyDTO(company);
 			ComputerDTO compuDTO =new ComputerDTO(name,introduced,discontinued,compaDTO); 
 			Computer comp = ComputerMapper.convertComputerDTOtoComputer(compuDTO);
+			StringBuilder erreur = new StringBuilder();
 			try
 			{
 				ValidationBackComputer.validationComputer(comp);
-				try
+				try 
 				{
-					//System.out.println("ouf c'est bon");
 					Optional<Computer> comput= ServiceComputer.getInstance().addComputer(comp);
 					taillePage=10;
 					maxPage=ServiceComputer.getInstance().getCount()/taillePage;
 					request.getRequestDispatcher("ListServlet?page="+ maxPage).forward(request,response);
-				}
-				catch (Exception e)
+				} 
+				catch (ClassNotFoundException e) 
 				{
-				
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-			catch (Exception e1)
+			catch (NameException e)
 			{ 
-				//System.out.println("erreur d'entrée du formulaire");
-				String erreur = "La date d'introduction n'est pas antérieur à la date de disparition ou le nom n'est pas rempli. Merci de corriger";
-				request.setAttribute("erreur", erreur);
-				request.setAttribute("computerToAdd", comp);
-				doGet(request,response);
+				erreur.append("Le nom n'est pas rempli. Merci de corriger\n");
 			}
+			catch (DateException e1)
+			{
+				erreur.append("La date d'introduction n'est pas antérieur à la date de disparition. Merci de corriger\n");
+			}
+			request.setAttribute("erreur", erreur);
+			request.setAttribute("computerToAdd", comp);
+			doGet(request,response);
+		
 		
 	}
 

@@ -60,18 +60,18 @@
                             </span>
                         </th>
                         <th>
-							<a href ="ListServlet?colonne=computName&tri=${tri+1}">Computer name</a>
+							<a href ="ListServlet?colonne=computer_name&tri=${tri+1}">Computer name</a>
                         </th>
                         <th>
-                            <a href ="ListServlet?colonne=intro&tri=${tri+1}">Introduced date</a>
+                            <a href ="ListServlet?colonne=introduced&tri=${tri+1}">Introduced date</a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            <a href ="ListServlet?colonne=disco&tri=${tri+1}">Discontinued date</a>
+                            <a href ="ListServlet?colonne=discontinued&tri=${tri+1}">Discontinued date</a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            <a href ="ListServlet?colonne=compaName&tri=${tri+1}">Company name</a>
+                            <a href ="ListServlet?colonne=company_name&tri=${tri+1}">Company name</a>
                         </th>
 
                     </tr>
@@ -103,18 +103,18 @@
             <ul class="pagination">
                 <c:if test="${page>1}">
                 <li>
-                    <a href="ListServlet?page=${page-1}" aria-label="Previous">
+                    <a href="ListServlet?page=${page-1}&taillePage=${taillePage}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               </c:if>
               <c:forEach var="i" begin="1" end="5">
 	             
-              <li><a href="ListServlet?page=${page+i-1}"><c:out value="${page+i-1}"></c:out></a></li>
+              <li><a href="ListServlet?page=${page+i-1}&taillePage=${taillePage}"><c:out value="${page+i-1}"></c:out></a></li>
      		 </c:forEach>
               <c:if test="${page<maxPage-4}">
               <li>
-                <a href="ListServlet?page=${page+5}" aria-label="Next">
+                <a href="ListServlet?page=${page+5}&taillePage=${taillePage}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

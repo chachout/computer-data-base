@@ -1,15 +1,17 @@
 package com.excilys.cbd.validation;
 
+import com.excilys.cbd.exceptions.DateException;
+import com.excilys.cbd.exceptions.NameException;
 import com.excilys.cbd.model.Computer;
 
 public class ValidationBackComputer 
 {
-	public static void validationComputer(Computer comp) throws Exception
+	public static void validationComputer(Computer comp) throws DateException, NameException
 	{
 			validationDate(comp);
 			validationName(comp);
 	}
-	private static void validationDate (Computer comp) throws Exception
+	private static void validationDate (Computer comp) throws DateException
 	{
 		if (comp.getDiscontinued()==null || comp.getIntroduced()==null)
 		{
@@ -23,11 +25,11 @@ public class ValidationBackComputer
 			}
 			else
 			{
-				throw new Exception ("La date d'introduction n'est pas antérieur à la date de disparition ");
+				throw new DateException ();
 			}
 		}
 	}
-	private static void validationName (Computer comp) throws Exception
+	private static void validationName (Computer comp) throws NameException
 	{
 		if (comp.getName() != null)
 		{
@@ -35,7 +37,7 @@ public class ValidationBackComputer
 		}
 		else
 		{
-			throw new Exception("Le nom doit être obligatoirement rempli");
+			throw new NameException();
 		}
 	}
 }

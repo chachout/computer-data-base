@@ -169,7 +169,7 @@ public class InterfaceUtilisateur
 										int limit = clavier.nextInt();
 										System.out.println("\n\t\t\tEntrez le num�ro du premier computer � afficher : ");
 										int offset = clavier.nextInt();
-										ServiceComputer.getInstance().getComputerListPaginer(limit, offset);
+										ServiceComputer.getInstance().getComputerListPaginer(0,null,limit, offset);
 									}
 									else
 									{

@@ -41,7 +41,6 @@ public class ListServlet extends HttpServlet
 	{
 		// TODO Auto-generated method stub
 		ArrayList<Computer> computerList=null;
-		//System.out.println(request.getParameter("tri")+ " "+request.getParameter("colonne"));
 		if (request.getParameter("tri")==null)
 		{
 			tri=0;
@@ -52,7 +51,6 @@ public class ListServlet extends HttpServlet
 		}
 		tri%=3;
 		colonne=request.getParameter("colonne");
-		//System.out.println(request.getParameter("search"));
 		if (request.getParameter("search")==null||request.getParameter("search")=="")
 		{
 			if (request.getParameter("taillePage")!=null)
@@ -67,28 +65,22 @@ public class ListServlet extends HttpServlet
 			{
 				totalComputer=ServiceComputer.getInstance().getCount();
 				maxPage=totalComputer/taillePage;
-				//System.out.println(taillePage);
 				if (request.getParameter("page")!=null)	
 				{
-					//System.out.println(request.getParameter("page"));
 					page=Integer.parseInt(request.getParameter("page"));
 					if (page==maxPage)
 					{
-						//System.out.println("page max");
-						computerList=classement(tri,colonne,ServiceComputer.getInstance().getCount()%10,page*taillePage);
-					}	
+						computerList=ServiceComputer.getInstance().getComputerListPaginer(tri,colonne,ServiceComputer.getInstance().getCount()%10,page*taillePage);
+					}
 					else
 					{
-						//System.out.println("page du milieu");
-						computerList=classement(tri,colonne,taillePage,page*taillePage);
+						computerList=ServiceComputer.getInstance().getComputerListPaginer(tri,colonne,taillePage,page*taillePage);
 					}
 				}
 				else
 				{
-					//System.out.println("première page"+taillePage);
 					page=1;
-					computerList=ServiceComputer.getInstance().getComputerListPaginer(taillePage,0);
-					computerList=classement(tri,colonne,taillePage,0);
+					computerList=ServiceComputer.getInstance().getComputerListPaginer(tri,colonne,taillePage,0);
 				}
 				request.setAttribute("page",page);
 				request.setAttribute("maxPage", maxPage);
@@ -106,7 +98,6 @@ public class ListServlet extends HttpServlet
 			try 
 			{
 				computerList=ServiceComputer.getInstance().findComputerByName(search);
-				//System.out.println(computerList);
 				totalComputer=computerList.size();
 			} 
 			catch (ClassNotFoundException e) 
@@ -128,12 +119,10 @@ public class ListServlet extends HttpServlet
 		// TODO Auto-generated method stub
 		
 		String idAttacher = request.getParameter("selection");
-		//System.out.println(request.getParameter("page"));
 		String[] listId = idAttacher.split(",");
 		
 		for (int i=0;i<listId.length;i++)
 		{
-			//System.out.println(listId[i]);
 			try 
 			{
 				ServiceComputer.getInstance().deleteComputer(Long.parseLong(listId[i]));
@@ -144,65 +133,6 @@ public class ListServlet extends HttpServlet
 				e.printStackTrace();
 			}
 		}
-		//request.setAttribute("page",request.getParameter("page"));
 		doGet(request, response);
-	}
-	public ArrayList<Computer> classement(int tri, String colonne, int limit, int offset) throws ClassNotFoundException
-	{
-		//System.out.println(tri +" "+ colonne);
-		ArrayList<Computer> computerList=null;
-		if (tri==0||colonne==null)
-		{
-			//System.out.println("cas 0");
-			computerList=ServiceComputer.getInstance().getComputerListPaginer(limit,offset);
-		}
-		else
-		{
-			if (tri==1)
-			{
-				switch (colonne)
-				{
-				case "computName" :
-					//System.out.println("cas 11");
-					computerList=ServiceComputer.getInstance().getListOrderComputNameAsc(limit, offset);
-					break;
-				case "intro" :
-					//System.out.println("cas 12");
-					computerList=ServiceComputer.getInstance().getListOrderIntroAsc(limit, offset);
-					break;
-				case "disco" :
-					//System.out.println("cas 13");
-					computerList=ServiceComputer.getInstance().getListOrderDiscoAsc(limit, offset);
-					break;
-				case "compaName" :
-					//System.out.println("cas 14");
-					computerList=ServiceComputer.getInstance().getListOrderCompaNameAsc(limit, offset);
-					break;
-				}
-			}
-			else
-			{
-				switch (colonne)
-				{
-				case "computName" :
-					//System.out.println("cas 21");
-					computerList=ServiceComputer.getInstance().getListOrderComputNameDes(limit, offset);
-					break;
-				case "intro" :
-					//System.out.println("cas 22");
-					computerList=ServiceComputer.getInstance().getListOrderIntroDes(limit, offset);
-					break;
-				case "disco" :
-					//System.out.println("cas 23");
-					computerList=ServiceComputer.getInstance().getListOrderDiscoDes(limit, offset);
-					break;
-				case "compaName" :
-					//System.out.println("cas 24");
-					computerList=ServiceComputer.getInstance().getListOrderCompaNameDes(limit, offset);
-					break;
-				}
-			}
-		}
-	return computerList;
 	}
 }

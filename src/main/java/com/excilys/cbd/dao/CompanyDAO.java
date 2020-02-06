@@ -149,12 +149,14 @@ public class CompanyDAO
 			{
 				preparation.rollback();
 			}
-			CompanyDAO.connexionClose(preparation);
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
+			preparation.rollback();
 		}
+		preparation.setAutoCommit(true);
+		CompanyDAO.connexionClose(preparation);
 		return value;
 	}
 }
