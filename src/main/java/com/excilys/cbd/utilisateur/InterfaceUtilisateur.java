@@ -129,7 +129,7 @@ public class InterfaceUtilisateur
 			{
 				if (i==3)
 				{
-					System.out.println("\n\t\t\tEntrez l'id du computer que vous voulez supprimer : ");
+					System.out.println("\n\t\t\tEntrez l'id de la company que vous voulez supprimer : ");
 					Long companyId= clavier.nextLong();
 					ServiceCompany.getInstance().getDeleteCompany(companyId);
 				}
@@ -177,7 +177,7 @@ public class InterfaceUtilisateur
 										{
 											System.out.println("\n\t\t\tEntrez l'id du computer que vous voulez supprimer.");
 											Long computerId = clavier.nextLong();
-											//ServiceComputer.getInstance().delete(computerId);
+											ServiceComputer.getInstance().deleteComputer(computerId);
 										}
 									}
 								}

@@ -44,12 +44,14 @@ public class ComputerDAO
 	}
 	private static Connection connexionOpen() throws ClassNotFoundException
 	{
-		Connection preparation = ConnecH2.getConnec().seConnecter();
+		//Connection preparation = ConnecH2.getConnec().seConnecter();
+		Connection preparation = ConnecHikari.getInstance().getConnection();
 		return preparation;
 	}
 	private static void connexionClose(Connection preparation) throws ClassNotFoundException
 	{
-		ConnecH2.getConnec().connectionClose(preparation);
+		//ConnecH2.getConnec().connectionClose(preparation);
+		ConnecHikari.getInstance().disconnect();
 	}
 	public ArrayList<Computer> toutComputer() throws ClassNotFoundException
 	{
@@ -62,7 +64,7 @@ public class ComputerDAO
 			ResultSet resultat=prepare.executeQuery();
 			while (resultat.next())
 			{ 
-				String name =resultat.getString("computer_name");
+				String name =resultat.getString("name");
 				Date intro = resultat.getDate("introduced");
 				Date disco = resultat.getDate("discontinued");
 				LocalDate introduced = null;

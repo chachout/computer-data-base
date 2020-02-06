@@ -29,12 +29,14 @@ public class CompanyDAO
 	}
 	private static Connection connexionOpen() throws ClassNotFoundException
 	{
-		Connection preparation = ConnecH2.getConnec().seConnecter();
+		//Connection preparation = ConnecH2.getConnec().seConnecter();
+		Connection preparation = ConnecHikari.getInstance().getConnection();
 		return preparation;
 	}
 	private static void connexionClose(Connection preparation) throws ClassNotFoundException
 	{
-		ConnecH2.getConnec().connectionClose(preparation);
+		//ConnecH2.getConnec().connectionClose(preparation);
+		ConnecHikari.getInstance().disconnect();
 	}
 	public ArrayList<Company> toutCompany() throws ClassNotFoundException
 	{
@@ -119,32 +121,33 @@ public class CompanyDAO
 	public int effacer(long companyId) throws ClassNotFoundException, SQLException
 	{
 		int value = 0;
-		//preparation.setAutoCommit(false);
+		Connection preparation = CompanyDAO.connexionOpen();
+		preparation.setAutoCommit(false);
 		try 
 		{
-			System.out.println("1");
-			Connection preparation = CompanyDAO.connexionOpen();
-			System.out.println("2"); 
+			//System.out.println("connecter"); 
 			PreparedStatement prepare = preparation.prepareStatement(ComputerDAO.EFFACERPARCOMPA) ;
 			prepare.setLong(1, companyId);
 			value=prepare.executeUpdate();
 			if (value >0)
 			{
+				//System.out.println("ordi supp "+ value);
 				prepare = preparation.prepareStatement(EFFACER) ;
 				prepare.setLong(1, companyId);
 				value=prepare.executeUpdate();
 				if (value==1)
 				{
-					//preparation.commit();
+					preparation.commit();
+					//System.out.println("comput sup");
 				}
 				else
 				{
-					//preparation.rollback();
+					preparation.rollback();
 				}
 			}
 			else
 			{
-				//preparation.rollback();
+				preparation.rollback();
 			}
 			CompanyDAO.connexionClose(preparation);
 		}
