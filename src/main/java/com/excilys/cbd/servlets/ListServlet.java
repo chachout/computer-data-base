@@ -3,19 +3,26 @@ package com.excilys.cbd.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.cbd.model.Computer;
+import com.excilys.cbd.service.ServiceCompany;
 import com.excilys.cbd.service.ServiceComputer;
 
 /**
  * Servlet implementation class ListServlet
  */
 @WebServlet(urlPatterns = "/ListServlet")
+@Controller
 public class ListServlet extends HttpServlet 
 {
 	private static final long serialVersionUID = 1L;
@@ -25,10 +32,20 @@ public class ListServlet extends HttpServlet
 	public int totalComputer;
 	public String colonne;
 	public int tri;
-    /**
-     * @see HttpServlet#HttpServlet()
+	@Autowired
+	private ServiceComputer serviceComputer;
+	@Autowired
+	private ServiceCompany serviceCompany;
+	/**
+     * @throws ServletException 
+	 * @see HttpServlet#HttpServlet()
      */
-    public ListServlet() 
+    public void init(ServletConfig config) throws ServletException
+    {
+    	super.init(config);
+    	SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
+	public ListServlet() 
     {
         super();
         // TODO Auto-generated constructor stub
@@ -63,24 +80,24 @@ public class ListServlet extends HttpServlet
 			}	
 			try 
 			{
-				totalComputer=ServiceComputer.getInstance().getCount();
+				totalComputer=serviceComputer.getCount();
 				maxPage=totalComputer/taillePage;
 				if (request.getParameter("page")!=null)	
 				{
 					page=Integer.parseInt(request.getParameter("page"));
 					if (page==maxPage)
 					{
-						computerList=ServiceComputer.getInstance().getComputerListPaginer(tri,colonne,ServiceComputer.getInstance().getCount()%10,page*taillePage);
+						computerList=serviceComputer.getComputerListPaginer(tri,colonne,serviceComputer.getCount()%10,page*taillePage);
 					}
 					else
 					{
-						computerList=ServiceComputer.getInstance().getComputerListPaginer(tri,colonne,taillePage,page*taillePage);
+						computerList=serviceComputer.getComputerListPaginer(tri,colonne,taillePage,page*taillePage);
 					}
 				}
 				else
 				{
 					page=1;
-					computerList=ServiceComputer.getInstance().getComputerListPaginer(tri,colonne,taillePage,0);
+					computerList=serviceComputer.getComputerListPaginer(tri,colonne,taillePage,0);
 				}
 				request.setAttribute("page",page);
 				request.setAttribute("maxPage", maxPage);
@@ -97,7 +114,7 @@ public class ListServlet extends HttpServlet
 			String search = request.getParameter("search");
 			try 
 			{
-				computerList=ServiceComputer.getInstance().findComputerByName(search);
+				computerList=serviceComputer.findComputerByName(search);
 				totalComputer=computerList.size();
 			} 
 			catch (ClassNotFoundException e) 
@@ -125,7 +142,7 @@ public class ListServlet extends HttpServlet
 		{
 			try 
 			{
-				ServiceComputer.getInstance().deleteComputer(Long.parseLong(listId[i]));
+				serviceComputer.deleteComputer(Long.parseLong(listId[i]));
 			} 
 			catch (NumberFormatException | ClassNotFoundException e) 
 			{	

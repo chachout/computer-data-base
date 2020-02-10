@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import com.excilys.cbd.dto.CompanyDTO;
 import com.excilys.cbd.dto.ComputerDTO;
 import com.excilys.cbd.mapper.ComputerMapper;
@@ -21,10 +24,13 @@ import com.excilys.cbd.service.ServiceComputer;
  * Servlet implementation class EditServlet
  */
 @WebServlet(urlPatterns = "/EditServlet")
+@Controller
 public class EditServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public String idComputer;
-       
+	@Autowired
+	private ServiceComputer serviceComputer;
+	private ServiceCompany serviceCompany;   
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -42,8 +48,8 @@ public class EditServlet extends HttpServlet {
 		idComputer=request.getParameter("id");
 		try 
 		{
-			listCompany = ServiceCompany.getInstance().getCompanyList();
-			Computer comp = ServiceComputer.getInstance().findComputerById(Long.parseLong(idComputer));
+			listCompany = serviceCompany.getCompanyList();
+			Computer comp = serviceComputer.findComputerById(Long.parseLong(idComputer));
 			request.setAttribute("listCompany",listCompany);
 			request.setAttribute("idComputer", idComputer);
 			request.setAttribute("computerToUpdate", comp);
@@ -74,7 +80,7 @@ public class EditServlet extends HttpServlet {
 		//System.out.println(comp+"Servlet");
 		try 
 		{
-			ServiceComputer.getInstance().editComputer(comp);
+			serviceComputer.editComputer(comp);
 			request.getRequestDispatcher("ListServlet").forward(request,response);
 		} 
 		catch (ClassNotFoundException e) 

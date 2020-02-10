@@ -74,10 +74,10 @@ public class InterfaceUtilisateur
 			else
 			{
 				companyId= Long.parseLong(idCompany);
-				compa = ServiceCompany.getInstance().getCompany(companyId);
+				//compa = ServiceCompany.getInstance().getCompany(companyId);
 			}
 			Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			 
-			ServiceComputer.getInstance().addComputer(comp);
+			//ServiceComputer.getInstance().addComputer(comp);
 		}
 		else
 		{
@@ -131,7 +131,7 @@ public class InterfaceUtilisateur
 				{
 					System.out.println("\n\t\t\tEntrez l'id de la company que vous voulez supprimer : ");
 					Long companyId= clavier.nextLong();
-					ServiceCompany.getInstance().getDeleteCompany(companyId);
+					//ServiceCompany.getInstance().getDeleteCompany(companyId);
 				}
 				else
 				{
@@ -145,13 +145,13 @@ public class InterfaceUtilisateur
 					{
 						if (i==5)
 						{
-							ServiceComputer.getInstance().getComputerList();
+						//	ServiceComputer.getInstance().getComputerList();
 						}
 						else
 						{
 							if (i==6)
 							{
-								ServiceCompany.getInstance().getCompanyList();
+							//	ServiceCompany.getInstance().getCompanyList();
 							}
 							else
 							{
@@ -159,7 +159,7 @@ public class InterfaceUtilisateur
 								{
 									System.out.println("\n\t\t\tEntrez l'id de la company que vous voulez trouvez : ");
 									Long companyId= clavier.nextLong();
-									ServiceCompany.getInstance().getCompany(companyId);
+								//	ServiceCompany.getInstance().getCompany(companyId);
 								}
 								else
 								{
@@ -169,7 +169,7 @@ public class InterfaceUtilisateur
 										int limit = clavier.nextInt();
 										System.out.println("\n\t\t\tEntrez le num�ro du premier computer � afficher : ");
 										int offset = clavier.nextInt();
-										ServiceComputer.getInstance().getComputerListPaginer(0,null,limit, offset);
+									//	ServiceComputer.getInstance().getComputerListPaginer(0,null,limit, offset);
 									}
 									else
 									{
@@ -177,7 +177,7 @@ public class InterfaceUtilisateur
 										{
 											System.out.println("\n\t\t\tEntrez l'id du computer que vous voulez supprimer.");
 											Long computerId = clavier.nextLong();
-											ServiceComputer.getInstance().deleteComputer(computerId);
+										//	ServiceComputer.getInstance().deleteComputer(computerId);
 										}
 									}
 								}

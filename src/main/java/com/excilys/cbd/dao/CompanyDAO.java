@@ -2,60 +2,40 @@ package com.excilys.cbd.dao;
 import java.sql.*;
 import java.util.ArrayList;
 
-import com.excilys.cbd.model.Company;
-import com.excilys.cbd.model.Computer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import com.excilys.cbd.model.Company;
+
+@Repository
 public class CompanyDAO 
 {
 	public static String TROUVERCOMPAID = "SELECT * FROM company WHERE id = ?";
 	public static String TROUVERCOMPANOM = "SELECT * FROM company WHERE name = ?";
 	public static String TOUTCOMPA = "SELECT * FROM company";
 	public static String EFFACER = "DELETE FROM company WHERE id = ?";
-	private static CompanyDAO instance;
+	@Autowired
+	private ConnecHikari connecHikari;
 	private CompanyDAO()
 	{
 	}
-	public static CompanyDAO getInstance()
-	{
-		if (instance == null)
-		{
-			instance= new CompanyDAO();
-			return instance;
-		}
-		else
-		{
-			return instance;
-		}
-	}
-	private static Connection connexionOpen() throws ClassNotFoundException
-	{
-		//Connection preparation = ConnecH2.getConnec().seConnecter();
-		Connection preparation = ConnecHikari.getInstance().getConnection();
-		return preparation;
-	}
-	private static void connexionClose(Connection preparation) throws ClassNotFoundException
-	{
-		//ConnecH2.getConnec().connectionClose(preparation);
-		ConnecHikari.getInstance().disconnect();
-	}
+	
 	public ArrayList<Company> toutCompany() throws ClassNotFoundException
 	{
 		ArrayList<Company> listCompany= new ArrayList<Company>();
 		try
 		{
-			Connection preparation = CompanyDAO.connexionOpen();
+			Connection preparation = connecHikari.getConnection();
 			PreparedStatement prepare = preparation.prepareStatement(TOUTCOMPA) ;
 			ResultSet resultat=prepare.executeQuery();
 			while (resultat.next())
 			{ 
 				String name =resultat.getString("name");
 				long id=resultat.getLong("id");
-				//System.out.println(name + id);
 				Company compa = new Company.CompanyBuilder().setId(id).setName(name).build();
 				listCompany.add(compa);
-				//System.out.println(compa.getName()+" "+compa.getId());
 			}
-			CompanyDAO.connexionClose(preparation);
+			connecHikari.disconnect();
 			return listCompany;
 		}
 		catch (SQLException e)
@@ -68,7 +48,7 @@ public class CompanyDAO
 	{
 		try
 		{
-			Connection preparation = CompanyDAO.connexionOpen();
+			Connection preparation = connecHikari.getConnection();
 			PreparedStatement prepare = preparation.prepareStatement(TROUVERCOMPAID) ;
 			prepare.setLong(1, id);
 			ResultSet resultat=prepare.executeQuery();
@@ -78,9 +58,8 @@ public class CompanyDAO
 				long idCompany = resultat.getLong("id");
 				String name = resultat.getString("name");
 				compa = new Company.CompanyBuilder().setId(idCompany).setName(name).build();
-				//System.out.println(compa.getId() + " " + compa.getName() + " ");
 			}
-			CompanyDAO.connexionClose(preparation);
+			connecHikari.disconnect();
 			return compa;
 		}
 		catch (SQLException e)
@@ -95,7 +74,7 @@ public class CompanyDAO
 		
 		try
 		{
-			Connection preparation = CompanyDAO.connexionOpen();
+			Connection preparation = connecHikari.getConnection();
 			PreparedStatement prepare = preparation.prepareStatement(TROUVERCOMPANOM) ;
 			prepare.setString(1, name);
 			ResultSet resultat=prepare.executeQuery();
@@ -106,9 +85,7 @@ public class CompanyDAO
 
 				Company compa = new Company.CompanyBuilder().setId(id).setName(nameCompany).build();
 
-
-				//System.out.println(compa.getId() + " " + compa.getName() + " ");
-				CompanyDAO.connexionClose(preparation);
+				connecHikari.disconnect();
 				return compa;
 			}
 		}
@@ -121,24 +98,24 @@ public class CompanyDAO
 	public int effacer(long companyId) throws ClassNotFoundException, SQLException
 	{
 		int value = 0;
-		Connection preparation = CompanyDAO.connexionOpen();
+		Connection preparation = connecHikari.getConnection();
 		preparation.setAutoCommit(false);
 		try 
 		{
-			//System.out.println("connecter"); 
+			
 			PreparedStatement prepare = preparation.prepareStatement(ComputerDAO.EFFACERPARCOMPA) ;
 			prepare.setLong(1, companyId);
 			value=prepare.executeUpdate();
 			if (value >0)
 			{
-				//System.out.println("ordi supp "+ value);
+				
 				prepare = preparation.prepareStatement(EFFACER) ;
 				prepare.setLong(1, companyId);
 				value=prepare.executeUpdate();
 				if (value==1)
 				{
 					preparation.commit();
-					//System.out.println("comput sup");
+					
 				}
 				else
 				{
@@ -156,7 +133,7 @@ public class CompanyDAO
 			preparation.rollback();
 		}
 		preparation.setAutoCommit(true);
-		CompanyDAO.connexionClose(preparation);
+		connecHikari.disconnect();
 		return value;
 	}
 }

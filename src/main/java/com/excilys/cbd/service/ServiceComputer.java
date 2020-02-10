@@ -3,29 +3,21 @@ package com.excilys.cbd.service;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.cbd.dao.ComputerDAO;
 import com.excilys.cbd.model.Computer;
 
+@Service
 public class ServiceComputer 
 {
-	private static ServiceComputer instance;
-	private final ComputerDAO computerDao = ComputerDAO.getInstance();
+	@Autowired
+	private ComputerDAO computerDao;
 	
-	private ServiceComputer() throws ClassNotFoundException
+	private ServiceComputer()
 	{
 		
-	}
-	public static ServiceComputer getInstance() throws ClassNotFoundException
-	{
-		if (instance == null)
-		{
-			instance= new ServiceComputer();
-			return instance;
-		}
-		else
-		{
-			return instance;
-		}
 	}
 	public ArrayList<Computer> getComputerList() throws ClassNotFoundException
 	{
@@ -44,7 +36,7 @@ public class ServiceComputer
 	}
 	public Optional<Computer> addComputer(Computer comput) throws ClassNotFoundException
 	{
-		int i=ComputerDAO.getInstance().creer(comput);
+		int i=computerDao.creer(comput);
 		if (i==1)
 		{
 			return Optional.of(comput);
@@ -56,20 +48,20 @@ public class ServiceComputer
 	}
 	public void editComputer(Computer comp) throws ClassNotFoundException
 	{
-		ComputerDAO.getInstance().modifier(comp);
+		computerDao.modifier(comp);
 	}
 	public Computer findComputerById(Long id) throws ClassNotFoundException
 	{
-		Computer comp = ComputerDAO.getInstance().trouverid(id);
+		Computer comp = computerDao.trouverid(id);
 		return comp;
 	}
 	public void deleteComputer(long id) throws ClassNotFoundException
 	{
-		ComputerDAO.getInstance().effacer(id);
+		computerDao.effacer(id);
 	}
 	public ArrayList<Computer> findComputerByName(String name) throws ClassNotFoundException
 	{
-		ArrayList<Computer> computerList=ComputerDAO.getInstance().trouvernom(name);
+		ArrayList<Computer> computerList=computerDao.trouvernom(name);
 		return computerList;
 	}
 }

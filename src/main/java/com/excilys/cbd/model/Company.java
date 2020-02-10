@@ -1,9 +1,5 @@
 package com.excilys.cbd.model;
 
-import java.time.LocalDate;
-
-import com.excilys.cbd.model.Computer.ComputerBuilder;
-
 public class Company 
 {
 	private long id;
@@ -13,13 +9,6 @@ public class Company
 		this.id=builder.id;
 		this.name=builder.name;
 	}
-	/*public Company(Long company_id, String name) 
-	{  
-		super();
-		this.id = company_id;
-		this.name = name;
-	}
-	*/
 	public Long getId() 
 	{
 		return id;

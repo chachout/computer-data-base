@@ -1,16 +1,20 @@
 package com.excilys.cbd.dao;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+
 import com.excilys.cbd.model.Company;
 import com.excilys.cbd.model.Computer;
-import com.excilys.cbd.service.ServiceComputer;
 
 import java.sql.*;
 import java.time.LocalDate;
 
+@Repository
 public class ComputerDAO
 {
-	public static String CREER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
+	static String CREER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	public static String TOUTCOMPU = "SELECT * FROM computer";
 	public static String TROUVERID = "SELECT * FROM computer WHERE id = ?";
 	public static String TROUVERNOM = "SELECT  computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? OR introduced LIKE ? OR discontinued LIKE ?;";
@@ -22,40 +26,21 @@ public class ComputerDAO
 	public static String ASCENDANT = " ASC";
 	public static String DESCENDANT = " DESC";
 	public static String ORDER = " ORDER BY ";
-	private ComputerDAO()
+	@Autowired
+	private CompanyDAO companyDao;
+	@Autowired
+	private ConnecHikari connecHikari;
+	public ComputerDAO()
 	{
 	}
-	private static ComputerDAO instance; 
-	public static ComputerDAO getInstance()
-	{
-		if (instance == null)
-		{
-			instance= new ComputerDAO();
-			return instance;
-		}
-		else
-		{
-			return instance;
-		}
-	}
-	private static Connection connexionOpen() throws ClassNotFoundException
-	{
-		//Connection preparation = ConnecH2.getConnec().seConnecter();
-		Connection preparation = ConnecHikari.getInstance().getConnection();
-		return preparation;
-	}
-	private static void connexionClose(Connection preparation) throws ClassNotFoundException
-	{
-		//ConnecH2.getConnec().connectionClose(preparation);
-		ConnecHikari.getInstance().disconnect();
-	}
+
 	public ArrayList<Computer> toutComputer() throws ClassNotFoundException
 	{
 		
 		ArrayList<Computer> listComputer= new ArrayList<Computer>();
 		try
 		{
-			Connection preparation = ComputerDAO.connexionOpen();
+			Connection preparation = connecHikari.getConnection();
 			PreparedStatement prepare = preparation.prepareStatement(TOUTCOMPU) ;
 			ResultSet resultat=prepare.executeQuery();
 			while (resultat.next())
@@ -84,7 +69,7 @@ public class ComputerDAO
 					listComputer.add(comp);
 				}
 			}
-			ComputerDAO.connexionClose(preparation);
+			connecHikari.disconnect();
 			return listComputer;
 		}
 		catch (SQLException e)
@@ -99,7 +84,7 @@ public class ComputerDAO
 		int nombreComputer=0;
 		try
 		{
-			Connection preparation = ComputerDAO.connexionOpen();
+			Connection preparation = connecHikari.getConnection();
 			PreparedStatement prepare = preparation.prepareStatement(TOUTCOMPU);
 			ResultSet resultat=prepare.executeQuery();
 			while (resultat.next())
@@ -119,7 +104,7 @@ public class ComputerDAO
 				}
 				Long company_id=resultat.getLong("company_id");
 				
-				Company compa = CompanyDAO.getInstance().trouverCompany(company_id);
+				Company compa = companyDao.trouverCompany(company_id);
 				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
 
 				if (comp.getName()!=null)
@@ -128,7 +113,7 @@ public class ComputerDAO
 				}
 				nombreComputer=listComputer.size();
 			}
-			ComputerDAO.connexionClose(preparation);
+			connecHikari.disconnect();
 			return nombreComputer;
 		}
 		catch (SQLException e)
@@ -143,7 +128,7 @@ public class ComputerDAO
 		String requete;
 		try
 		{
-			Connection preparation = ComputerDAO.connexionOpen();
+			Connection preparation = connecHikari.getConnection();
 			if (tri==0||colonne==null)
 			{
 				requete = SELECTION + LIMIT;
@@ -189,7 +174,7 @@ public class ComputerDAO
 					listComputer.add(comp);
 				}
 			}
-			ComputerDAO.connexionClose(preparation);
+			connecHikari.disconnect();
 			return listComputer;
 		}
 		catch (SQLException e)
@@ -202,7 +187,7 @@ public class ComputerDAO
 	{
 		try
 		{
-			Connection preparation = ComputerDAO.connexionOpen();
+			Connection preparation = connecHikari.getConnection();
 			PreparedStatement prepare = preparation.prepareStatement(TROUVERID) ;
 			prepare.setLong(1, id);
 			ResultSet resultat=prepare.executeQuery();
@@ -225,7 +210,7 @@ public class ComputerDAO
 				}
 				long company_id=resultat.getLong("company_id");
 				
-				Company compa = CompanyDAO.getInstance().trouverCompany(company_id);
+				Company compa = companyDao.trouverCompany(company_id);
 				Computer comp = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(compa).build();			
 
 				if (comp.getName()!=null)
@@ -238,7 +223,7 @@ public class ComputerDAO
 					return null;
 				}
 			}
-			ComputerDAO.connexionClose(preparation);
+			connecHikari.disconnect();
 		}
 		catch (SQLException e)
 		{
@@ -251,7 +236,7 @@ public class ComputerDAO
 		ArrayList<Computer> listComputer= new ArrayList<Computer>();
 		try
 		{
-			Connection preparation = ComputerDAO.connexionOpen();
+			Connection preparation = connecHikari.getConnection();
 			PreparedStatement prepare = preparation.prepareStatement(TROUVERNOM) ;
 			recherche=recherche.toLowerCase();
 			recherche="%"+recherche+"%";
@@ -284,7 +269,7 @@ public class ComputerDAO
 				comp.setId(id);
 				listComputer.add(comp);
 			}
-			ComputerDAO.connexionClose(preparation);
+			connecHikari.disconnect();
 		}
 		catch (SQLException e)
 		{
@@ -295,7 +280,7 @@ public class ComputerDAO
 	public int modifier(Computer comp) throws ClassNotFoundException
 	{
 		int value = 0;
-		Connection preparation = ComputerDAO.connexionOpen();
+		Connection preparation = connecHikari.getConnection();
 		if (comp.getName()!=null)
 		{
 			try
@@ -332,13 +317,13 @@ public class ComputerDAO
 				e.printStackTrace();
 			}
 		}
-		ComputerDAO.connexionClose(preparation);
+		connecHikari.disconnect();
 		return value;
 	}
 	public int effacer(long computerId) throws ClassNotFoundException
 	{
 		int value = 0;
-		Connection preparation = ComputerDAO.connexionOpen();
+		Connection preparation = connecHikari.getConnection();
 		try
 		{
 			PreparedStatement prepare = preparation.prepareStatement(EFFACER) ;
@@ -349,13 +334,13 @@ public class ComputerDAO
 		{
 			e.printStackTrace();
 		}
-		ComputerDAO.connexionClose(preparation);
+		connecHikari.disconnect();
 		return value;
 	}
 	public int effacerComputIdCompany(long companyId) throws ClassNotFoundException
 	{
 		int value = 0;
-		Connection preparation = ComputerDAO.connexionOpen();
+		Connection preparation = connecHikari.getConnection();
 		try
 		{
 			PreparedStatement prepare = preparation.prepareStatement(EFFACERPARCOMPA) ;
@@ -366,12 +351,12 @@ public class ComputerDAO
 		{
 			e.printStackTrace();
 		}
-		ComputerDAO.connexionClose(preparation);
+		connecHikari.disconnect();
 		return value;
 	}
 	public int creer(Computer comp) throws ClassNotFoundException
 	{
-		Connection preparation = ComputerDAO.connexionOpen();
+		Connection preparation = connecHikari.getConnection();
 		int value = 0;
 		try
 		{
@@ -406,7 +391,7 @@ public class ComputerDAO
 		{
 			e.printStackTrace();
 		}
-		ComputerDAO.connexionClose(preparation);
+		connecHikari.disconnect();
 		return value;
 	}
 }

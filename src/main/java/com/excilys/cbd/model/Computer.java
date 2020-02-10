@@ -1,63 +1,15 @@
 package com.excilys.cbd.model;
 import java.time.*;
 import com.excilys.cbd.model.Company;
+
 public class Computer
 {
-	@Override
-	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", compa=" + compa + "]";
-	}
 	private long id;
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
 	private Company compa;
-	/*public Computer(String name, LocalDate introduced, LocalDate discontinued, long idCompany) 
-	{
-		super();
-		this.name=name;
-		if (discontinued.isAfter(introduced))
-		{
-			this.introduced = introduced;
-			this.discontinued = discontinued;
-		}
-		this.idCompany=idCompany;
-	}
-	public Computer(String name, long company_id) 
-	{
-		super();
-		this.name = name;
-		this.idCompany = company_id;
-	}
-	public Computer(String name, LocalDate introduced) 
-	{
-		super();
-		this.name = name;
-		this.introduced = introduced;
-	}
-	public Computer(String name, LocalDate introduced, long idCompany) 
-	{
-		super();
-		this.name = name;
-		this.introduced = introduced;
-		this.idCompany = idCompany;
-	}
-	public Computer(String name, LocalDate introduced, LocalDate discontinued) 
-	{
-		super();
-		this.name = name;
-		if (discontinued.isAfter(introduced))
-		{
-			this.introduced = introduced;
-			this.discontinued = discontinued;
-		}
-	}
-	public Computer(String name) 
-	{
-		super();
-		this.name = name;
-	}*/
+	
 	private Computer(ComputerBuilder builder)
 	{
 		this.name=builder.name;
@@ -161,5 +113,10 @@ public class Computer
 		{
 			return new Computer(this);
 		}
+	}
+	@Override
+	public String toString() {
+		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+				+ ", compa=" + compa + "]";
 	}
 }

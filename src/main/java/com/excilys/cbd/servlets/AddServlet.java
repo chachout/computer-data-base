@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import com.excilys.cbd.dao.CompanyDAO;
 import com.excilys.cbd.dto.CompanyDTO;
 import com.excilys.cbd.dto.ComputerDTO;
 import com.excilys.cbd.exceptions.DateException;
@@ -28,11 +32,14 @@ import com.excilys.cbd.validation.ValidationBackComputer;
  * Servlet implementation class AddServlet
  */
 @WebServlet(urlPatterns = "/AddServlet")
+@Controller
 public class AddServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public int maxPage;
 	public int taillePage;
-       
+	@Autowired
+	private ServiceComputer serviceComputer;
+	private ServiceCompany serviceCompany;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -49,11 +56,12 @@ public class AddServlet extends HttpServlet {
 		ArrayList<Company> listCompany;
 		try 
 		{
-			listCompany = ServiceCompany.getInstance().getCompanyList();
+			listCompany = serviceCompany.getCompanyList();
 			request.setAttribute("listCompany",listCompany);
 			request.getRequestDispatcher("views/addComputer.jsp").forward(request,response);
 		} 
-		catch (ClassNotFoundException e) {
+		catch (ClassNotFoundException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -78,9 +86,9 @@ public class AddServlet extends HttpServlet {
 				ValidationBackComputer.validationComputer(comp);
 				try 
 				{
-					Optional<Computer> comput= ServiceComputer.getInstance().addComputer(comp);
+					Optional<Computer> comput= serviceComputer.addComputer(comp);
 					taillePage=10;
-					maxPage=ServiceComputer.getInstance().getCount()/taillePage;
+					maxPage=serviceComputer.getCount()/taillePage;
 					request.getRequestDispatcher("ListServlet?page="+ maxPage).forward(request,response);
 				} 
 				catch (ClassNotFoundException e) 
