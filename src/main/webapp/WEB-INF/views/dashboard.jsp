@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ page isELIgnored="false"%>
 <%@page import="java.util.ArrayList" %>
 <!DOCTYPE html>
@@ -8,14 +9,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+<spring:url value="/resources/css/bootstrap.min.css" var="bootstrapStyle" />
+<spring:url value="/resources/css/font-awesome.css" var="fontAweSomeStyle" />
+<spring:url value="/resources/css/main.css" var="mainCss" />
+
+<link href="${bootstrapStyle}" rel="stylesheet" media="screen">
+<link href="${fontAweSomeStyle}" rel="stylesheet" media="screen">
+<link href="${mainCss}" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="ListServlet"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -26,7 +31,7 @@
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
-                    <form id="searchForm" action="ListServlet" method="GET" class="form-inline">
+                    <form id="searchForm" action="#" method="GET" class="form-inline">
 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
@@ -34,13 +39,13 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="AddServlet">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
         </div>
 
-        <form id="deleteForm" action="ListServlet" method="POST">
+        <form id="deleteForm" action="dashboard" method="POST">
             <input type="hidden" name="selection" value="">
         </form>
 
@@ -60,18 +65,18 @@
                             </span>
                         </th>
                         <th>
-							<a href ="ListServlet?colonne=computer_name&tri=${tri+1}">Computer name</a>
+							<a href ="?colonne=computer_name&tri=${tri+1}&taillePage=${taillePage}">Computer name</a>
                         </th>
                         <th>
-                            <a href ="ListServlet?colonne=introduced&tri=${tri+1}">Introduced date</a>
+                            <a href ="?colonne=introduced&tri=${tri+1}&taillePage=${taillePage}">Introduced date</a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            <a href ="ListServlet?colonne=discontinued&tri=${tri+1}">Discontinued date</a>
+                            <a href ="?colonne=discontinued&tri=${tri+1}&taillePage=${taillePage}">Discontinued date</a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            <a href ="ListServlet?colonne=company_name&tri=${tri+1}">Company name</a>
+                            <a href ="?colonne=company_name&tri=${tri+1}&taillePage=${taillePage}">Company name</a>
                         </th>
 
                     </tr>
@@ -79,17 +84,17 @@
                 <!-- Browse attribute computers -->
                 <tbody id="results">
                     
-                    <c:forEach var="computer" items="${listComput}">
+                    <c:forEach var="computerDTO" items="${listComput}">
 			     <tr>
 			      <td class="editMode">
-                            <input type="checkbox" name="cb" class="cb" value="${computer.id}">
+                            <input type="checkbox" name="cb" class="cb" value="${computerDTO.id}">
                   </td>
 					<td>
-					<a href ="EditServlet?id=${computer.id}" onclick=""><c:out value="${computer.name}"></c:out></a>
+					<a href ="editComputer?id=${computerDTO.id}" onclick=""><c:out value="${computerDTO.name}"></c:out></a>
 					</td>
-			         <td> <c:out value = "${computer.introduced}"/><p> </td>
-			         <td> <c:out value = "${computer.discontinued}"/><p> </td>
-			         <td> <c:out value = "${computer.company.name}"/><p> </td>
+			         <td> <c:out value = "${computerDTO.introduced}"/><p> </td>
+			         <td> <c:out value = "${computerDTO.discontinued}"/><p> </td>
+			         <td> <c:out value = "${computerDTO.companyDTO.name}"/><p> </td>
 			         
 			      </tr>
 				</c:forEach>
@@ -103,18 +108,18 @@
             <ul class="pagination">
                 <c:if test="${page>1}">
                 <li>
-                    <a href="ListServlet?page=${page-1}&taillePage=${taillePage}" aria-label="Previous">
+                    <a href="?page=${page-1}&taillePage=${taillePage}&colonne=${colonne}&tri=${tri}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                   </a>
               </li>
               </c:if>
               <c:forEach var="i" begin="1" end="5">
 	             
-              <li><a href="ListServlet?page=${page+i-1}&taillePage=${taillePage}"><c:out value="${page+i-1}"></c:out></a></li>
+              <li><a href="?page=${page+i-1}&taillePage=${taillePage}&colonne=${colonne}&tri=${tri}"><c:out value="${page+i-1}"></c:out></a></li>
      		 </c:forEach>
               <c:if test="${page<maxPage-4}">
               <li>
-                <a href="ListServlet?page=${page+5}&taillePage=${taillePage}" aria-label="Next">
+                <a href="?page=${page+5}&taillePage=${taillePage}&colonne=${colonne}&tri=${tri}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
@@ -123,15 +128,18 @@
  
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default"><a href = "ListServlet?taillePage=${taillePage=10}">10</a></button>
-            <button type="button" class="btn btn-default"><a href = "ListServlet?taillePage=${taillePage=50}">50</a></button>
-            <button type="button" class="btn btn-default"><a href = "ListServlet?taillePage=${taillePage=100}">100</a></button>
+            <button type="button" class="btn btn-default"><a href = "?taillePage=${taillePage=10}&colonne=${colonne}&tri=${tri}">10</a></button>
+            <button type="button" class="btn btn-default"><a href = "?taillePage=${taillePage=50}&colonne=${colonne}&tri=${tri}">50</a></button>
+            <button type="button" class="btn btn-default"><a href = "?taillePage=${taillePage=100}&colonne=${colonne}&tri=${tri}">100</a></button>
         </div>
 
     </footer>
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/dashboard.js"></script>
+<spring:url value="/resources/js/jquery.min.js" var="jqueryMinJs" />
+<spring:url value="/resources/js/bootstrap.min.js" var="bootsrapJs" />
+<spring:url value="/resources/js/dashboard.js" var="dashboardJs" />
 
+<script src="${jqueryMinJs }"></script>
+<script src="${bootsrapJs }"></script>
+<script src="${dashboardJs }"></script>
 </body>
 </html>

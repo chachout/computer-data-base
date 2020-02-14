@@ -6,17 +6,17 @@ import com.excilys.cbd.model.Company;
 
 public class ComputerDTO 
 {
-	private long idComputer;
+	private long id;
 	private String name;
 	private String introduced;
 	private String discontinued;
-	private CompanyDTO compa;
-	public ComputerDTO(String name,String introduced, String discontinued, CompanyDTO compa)
+	private CompanyDTO companyDTO;
+	public ComputerDTO(String name,String introduced, String discontinued, CompanyDTO companyDTO)
 	{
 		this.name=name;
 		this.introduced=introduced;
 		this.discontinued=discontinued;
-		this.compa=compa;
+		this.companyDTO=companyDTO;
 	}
 	public String getName() {
 		return name;
@@ -24,11 +24,11 @@ public class ComputerDTO
 	public void setName(String name) {
 		this.name = name;
 	}
-	public long getIdComputer() {
-		return idComputer;
+	public long getId() {
+		return id;
 	}
-	public void setIdComputer(long idComputer) {
-		this.idComputer = idComputer;
+	public void setId(long id) {
+		this.id = id;
 	}
 	public String getIntroduced() {
 		return introduced;
@@ -42,11 +42,15 @@ public class ComputerDTO
 	public void setDiscontinued(String discontinued) {
 		this.discontinued = discontinued;
 	}
-	public CompanyDTO getCompa() {
-		return compa;
+	public CompanyDTO getCompanyDTO() {
+		return companyDTO;
 	}
-	public void setCompa(CompanyDTO compa) {
-		this.compa = compa;
+	public void setCompanyDTO(CompanyDTO companyDTO) {
+		this.companyDTO = companyDTO;
 	}
-	
+	@Override
+	public String toString() {
+		return "ComputerDTO [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+				+ ", company=" + companyDTO + "]";
+	}
 }

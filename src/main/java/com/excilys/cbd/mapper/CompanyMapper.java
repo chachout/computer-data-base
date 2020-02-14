@@ -24,4 +24,11 @@ public class CompanyMapper implements RowMapper<Company>
 		Company compa = new Company.CompanyBuilder().setId(id).build();
 		return compa;
 	}
+	public static CompanyDTO convertCompanytoCompanyDTO(Company compa)
+	{
+		long id=compa.getId();
+		String name=compa.getName();
+		CompanyDTO compaDTO = new CompanyDTO(id,name);
+		return compaDTO;
+	}
 }

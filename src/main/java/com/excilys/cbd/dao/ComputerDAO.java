@@ -52,7 +52,7 @@ public class ComputerDAO
 		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("limit",limit)
 				.addValue("offset",offset);
 		String requete;
-		if (tri==0||colonne==null) {
+		if (tri==0||colonne==""||colonne==null) {
 			requete = SELECTION + LIMIT;
 		} else if (tri==1) {
 				requete = SELECTION + ORDER + colonne + ASCENDANT + LIMIT;

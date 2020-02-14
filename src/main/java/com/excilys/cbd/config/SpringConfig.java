@@ -1,5 +1,8 @@
 package com.excilys.cbd.config;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +17,10 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
-@ComponentScan(basePackages = {"com.excilys.cbd.dao","com.excilys.cbd.service","com.excilys.cbd.servlet","com.excilys.cbd.mapper"})
+@ComponentScan(basePackages = {"com.excilys.cbd.dao","com.excilys.cbd.service","com.excilys.cbd.controleur","com.excilys.cbd.mapper"})
 @PropertySource("classpath:datasource.properties")
 public class SpringConfig extends AbstractContextLoaderInitializer 
 {
@@ -48,5 +52,14 @@ public class SpringConfig extends AbstractContextLoaderInitializer
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate=new NamedParameterJdbcTemplate(dataSource);
 		return namedParameterJdbcTemplate;
+	}
+	@Override
+	public void onStartup(ServletContext servletContext) throws ServletException {
+		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
+		webContext.register(SpringConfig.class,SpringMVCConfig.class);
+		webContext.setServletContext(servletContext);
+		ServletRegistration.Dynamic servlet = servletContext.addServlet("dynamicServlet", new DispatcherServlet(webContext));
+		servlet.setLoadOnStartup(1);
+		servlet.addMapping("/");
 	}
 }
