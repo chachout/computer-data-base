@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="cdb.title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <spring:url value="/resources/css/bootstrap.min.css" var="bootstrapStyle" />
@@ -19,7 +19,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> <spring:message code="cdb.title"/> </a>
         </div>
     </header>
 
@@ -27,23 +27,23 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
+                    <h1><spring:message code="Add"/></h1>
                     <form action="addComputer" method="POST" name = "addComputer">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
+                                <label for="computerName"><spring:message code="Computer"/></label>
                                 <input type="text" class="form-control" name="name" id="computerName" value="${computerToAdd.name}" placeholder="Computer name">
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced"><spring:message code="Introduced"/></label>
                                 <input type="date" class="form-control" name="introduced" id="introduced" value="${computerToAdd.introduced}" placeholder="Introduced date">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued"><spring:message code="Discontinued"/></label>
                                 <input type="date" class="form-control" name="discontinued" id="discontinued" value="${computerToAdd.discontinued}" placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
-                                <label for="company">Company</label>
+                                <label for="company"><spring:message code="Company"/></label>
                                 <select class="form-control" name="companyDTO.id" id="company" >
                                   <c:forEach var="companyDTO" items="${listCompany}">
                                     <option value="${companyDTO.id}"><c:out value = "${companyDTO.name}"/></option>
@@ -57,7 +57,7 @@
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="dashboard" class="btn btn-default">Cancel</a>
+                            <a href="dashboard" class="btn btn-default"><spring:message code="Cancel"/></a>
                         </div>
                     </form>
                 </div>

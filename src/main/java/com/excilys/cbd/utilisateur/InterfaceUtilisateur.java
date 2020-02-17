@@ -13,7 +13,6 @@ import com.excilys.cbd.model.Company;
 import com.excilys.cbd.model.Computer;
 import com.excilys.cbd.service.ServiceCompany;
 import com.excilys.cbd.service.ServiceComputer;
-import com.excilys.cbd.Logger.Logging;
 
 public class InterfaceUtilisateur 
 {

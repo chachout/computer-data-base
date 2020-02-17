@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="cdb.title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -20,14 +20,22 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard"> <spring:message code="cdb.title"/> </a>
+        <div class="dropdown ">
+	            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
+	               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><spring:message code="app.lang.title"/></button>
+	            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+	            	  <a class="dropdown-item" href="?lang=fr"><spring:message code="app.lang.french"/></a>
+	               	  <a class="dropdown-item" href="?lang=en"><spring:message code="app.lang.english"/></a> 
+	          </div>
+        </div>
         </div>
     </header>
 
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-                 <c:out value = "${totalComputer} Computer"/> 
+                 <c:out value = "${totalComputer}"/> <spring:message code="ComputerFound"/>
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
@@ -39,8 +47,8 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="Add"/></a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="Edit"/></a>
                 </div>
             </div>
         </div>
@@ -65,18 +73,18 @@
                             </span>
                         </th>
                         <th>
-							<a href ="?colonne=computer_name&tri=${tri+1}&taillePage=${taillePage}">Computer name</a>
+							<a href ="?colonne=computer_name&tri=${tri+1}&taillePage=${taillePage}"><spring:message code="Computer"/></a>
                         </th>
                         <th>
-                            <a href ="?colonne=introduced&tri=${tri+1}&taillePage=${taillePage}">Introduced date</a>
+                            <a href ="?colonne=introduced&tri=${tri+1}&taillePage=${taillePage}"><spring:message code="Introduced"/></a>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            <a href ="?colonne=discontinued&tri=${tri+1}&taillePage=${taillePage}">Discontinued date</a>
+                            <a href ="?colonne=discontinued&tri=${tri+1}&taillePage=${taillePage}"><spring:message code="Discontinued"/></a>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            <a href ="?colonne=company_name&tri=${tri+1}&taillePage=${taillePage}">Company name</a>
+                            <a href ="?colonne=company_name&tri=${tri+1}&taillePage=${taillePage}"><spring:message code="Company"/></a>
                         </th>
 
                     </tr>
