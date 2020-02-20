@@ -26,6 +26,7 @@
     <jstl-version>1.2</jstl-version>
     <spring-version>5.2.3.RELEASE</spring-version>
     <commonslogging-version>1.1</commonslogging-version>
+    <hibernatecore-version>5.4.12.Final</hibernatecore-version>
   </properties>
 
   <dependencies>
@@ -82,6 +83,21 @@
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-webmvc</artifactId>
 	    <version>${spring-version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-core</artifactId>
+	    <version>${hibernatecore-version}</version>
+	</dependency>
+	<dependency>
+          <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.0.13</version>
+    </dependency>
+    <dependency>
+	    <groupId>org.springframework.data</groupId>
+	    <artifactId>spring-data-jpa</artifactId>
+	    <version>2.2.4.RELEASE</version>
 	</dependency>
   </dependencies>
 

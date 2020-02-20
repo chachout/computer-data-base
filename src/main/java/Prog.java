@@ -10,6 +10,7 @@ public class Prog
 {
 	public static void main(String[] args) throws ParseException, ClassNotFoundException, SQLException 
 	{
-		InterfaceUtilisateur.AfficherInterface();
+		//InterfaceUtilisateur.AfficherInterface();
+		//System.out.println(ServiceCompany.getCompany(1L));
 	}
 }

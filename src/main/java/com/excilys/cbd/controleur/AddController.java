@@ -1,6 +1,7 @@
 package com.excilys.cbd.controleur;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,8 +28,8 @@ public class AddController {
 	public ServiceComputer serviceComputer;
 	
 	private String listCompany(ModelMap dataMap) throws ClassNotFoundException{
-		ArrayList<CompanyDTO>companyDTOList=new ArrayList<CompanyDTO>();
-		ArrayList<Company>companyList=new ArrayList<Company>();
+		List<CompanyDTO>companyDTOList=new ArrayList<CompanyDTO>();
+		List<Company>companyList=new ArrayList<Company>();
 		companyList=serviceCompany.getCompanyList();
 		companyList.stream().forEach(compa->companyDTOList.add(CompanyMapper.convertCompanytoCompanyDTO(compa)));
 		dataMap.put("listCompany", companyDTOList);

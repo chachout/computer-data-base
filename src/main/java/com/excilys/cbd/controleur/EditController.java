@@ -1,6 +1,7 @@
 package com.excilys.cbd.controleur;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,8 +28,8 @@ public class EditController {
 	public ServiceComputer serviceComputer;
 	
 	private String findComputUpdate(String idComputer, ModelMap dataMap) throws ClassNotFoundException {
-		ArrayList<CompanyDTO>companyDTOList=new ArrayList<CompanyDTO>();
-		ArrayList<Company>companyList=new ArrayList<Company>();
+		List<CompanyDTO>companyDTOList=new ArrayList<CompanyDTO>();
+		List<Company>companyList=new ArrayList<Company>();
 		companyList=serviceCompany.getCompanyList();
 		companyList.stream().forEach(compa->companyDTOList.add(CompanyMapper.convertCompanytoCompanyDTO(compa)));
 		dataMap.put("listCompany", companyDTOList);
@@ -51,9 +52,8 @@ public class EditController {
 	public String postEditComputer (@ModelAttribute("computerToUpdate")ComputerDTO compDTO,
 			@RequestParam(value="maxPage", defaultValue = "1")int maxPage,
 			ModelMap dataMap) throws ClassNotFoundException {
-		System.out.println(compDTO);
 		updateComput(compDTO, dataMap);
 		dataMap.put("computerToUpdate", compDTO);
-		return "redirect:dashboard?taillePage=10&colonne=&tri=0&page="+maxPage;
+		return "dashboard";
 	}
 }

@@ -1,11 +1,14 @@
 package com.excilys.cbd.config;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,6 +19,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -28,6 +38,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 
 @EnableWebMvc
+@EnableTransactionManagement
 @Configuration
 @ComponentScan(basePackages = {"com.excilys.cbd.dao", "com.excilys.cbd.controlleur","com.excilys.cbd.service","com.excilys.cbd.controleur","com.excilys.cbd.mapper"})
 @PropertySource("classpath:datasource.properties")
@@ -45,7 +56,7 @@ public class SpringConfig extends AbstractContextLoaderInitializer
 	Environment environment;
 
 	@Bean
-	DataSource dataSource() {
+	DataSource getConnection() {
 		DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
 //		driverManagerDataSource.setUrl(environment.getProperty("jdbcUrl"));
 //		driverManagerDataSource.setUsername(environment.getProperty("username"));
@@ -71,4 +82,23 @@ public class SpringConfig extends AbstractContextLoaderInitializer
 		servlet.setLoadOnStartup(1);
 		servlet.addMapping("/");
 	}
+	@Bean
+	public LocalSessionFactoryBean sessionFactory() {
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+		sessionFactory.setDataSource(getConnection());
+		sessionFactory.setPackagesToScan("com.excilys.cbd.model");
+		return sessionFactory;
+	}
+	@Bean
+    public PlatformTransactionManager hibernateTransactionManager() {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+        return transactionManager;
+    }
+	@Bean
+	@Qualifier(value = "entityManager")
+	public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
+	    return entityManagerFactory.createEntityManager();
+	}
+	
 }

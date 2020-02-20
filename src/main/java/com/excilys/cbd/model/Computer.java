@@ -1,21 +1,38 @@
 package com.excilys.cbd.model;
 import java.time.*;
 import com.excilys.cbd.model.Company;
-
+import javax.persistence.*;
+@Entity
+@Table(name="computer")
 public class Computer
 {
+	@Id
+	@Column(name="id")
 	private long id;
-	private String name;
-	private LocalDate introduced;
-	private LocalDate discontinued;
-	private Company compa;
 	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="introduced")
+	private LocalDate introduced;
+	
+	@Column(name="discontinued")
+	private LocalDate discontinued;
+	
+	@ManyToOne
+	@JoinColumn(name = "company_id")
+	private Company company;
+	
+	public Computer() {
+
+	}
+  
 	private Computer(ComputerBuilder builder)
 	{
 		this.name=builder.name;
 		this.introduced=builder.introduced;
 		this.discontinued=builder.discontinued;
-		this.compa=builder.compa;
+		this.company=builder.company;
 	}
 	public String getName() 
 	{
@@ -75,11 +92,11 @@ public class Computer
 	}
 	public Company getCompany() 
 	{
-		return compa;
+		return company;
 	}
-	public void setCompany(Company compa) 
+	public void setCompany(Company company) 
 	{
-		this.compa=compa;
+		this.company=company;
 	}
 	public static class ComputerBuilder
 	{
@@ -88,7 +105,7 @@ public class Computer
 		
 		private LocalDate introduced;
 		private LocalDate discontinued;
-		private Company compa;
+		private Company company;
 
 		public ComputerBuilder (String name)
 		{
@@ -104,9 +121,9 @@ public class Computer
 			this.discontinued=discontinued;
 			return this;
 		}
-		public ComputerBuilder setCompany(Company compa)
+		public ComputerBuilder setCompany(Company company)
 		{
-			this.compa=compa;
+			this.company=company;
 			return this;
 		}
 		public Computer build()
@@ -117,6 +134,6 @@ public class Computer
 	@Override
 	public String toString() {
 		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", compa=" + compa + "]";
+				+ ", company=" + company + "]";
 	}
 }

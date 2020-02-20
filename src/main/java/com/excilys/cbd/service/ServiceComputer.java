@@ -1,6 +1,6 @@
 package com.excilys.cbd.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,14 @@ public class ServiceComputer
 	{
 		this.computerDao=computerDao;
 	}
-	public ArrayList<Computer> getComputerList() throws ClassNotFoundException
+	public List<Computer> getComputerList() throws ClassNotFoundException
 	{
-		ArrayList<Computer> listComput=computerDao.toutComputer();
+		List<Computer> listComput=computerDao.toutComputer();
 		return listComput;	
 	}
-	public ArrayList<Computer> getComputerListPaginer(int tri, String colonne, int limit, int offset) throws ClassNotFoundException
+	public List<Computer> getComputerListPaginer(int tri, String colonne, int limit, int offset) throws ClassNotFoundException
 	{
-		ArrayList<Computer> listComput=computerDao.pageComputer(tri, colonne, limit, offset);
+		List<Computer> listComput=computerDao.pageComputer(tri, colonne, limit, offset);
 		return listComput;
 	}
 	public int getCount() throws ClassNotFoundException
@@ -58,9 +58,9 @@ public class ServiceComputer
 	{
 		computerDao.effacer(id);
 	}
-	public ArrayList<Computer> findComputerByName(String name) throws ClassNotFoundException
+	public List<Computer> findComputerByName(String name) throws ClassNotFoundException
 	{
-		ArrayList<Computer> computerList=computerDao.trouvernom(name);
+		List<Computer> computerList=computerDao.trouvernom(name);
 		return computerList;
 	}
 }

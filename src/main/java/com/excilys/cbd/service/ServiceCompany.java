@@ -1,7 +1,7 @@
 package com.excilys.cbd.service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,9 @@ public class ServiceCompany
 		this.companyDao=companyDao;
 	}
 	
-	public ArrayList<Company> getCompanyList() throws ClassNotFoundException
+	public List<Company> getCompanyList() throws ClassNotFoundException
 	{
-		ArrayList<Company> listCompa=companyDao.toutCompany();
+		List<Company> listCompa=companyDao.toutCompany();
 		return listCompa;	
 	}
 	public Company getCompany(Long id) throws ClassNotFoundException

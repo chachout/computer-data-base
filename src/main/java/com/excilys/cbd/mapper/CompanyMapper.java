@@ -26,9 +26,12 @@ public class CompanyMapper implements RowMapper<Company>
 	}
 	public static CompanyDTO convertCompanytoCompanyDTO(Company compa)
 	{
-		long id=compa.getId();
-		String name=compa.getName();
-		CompanyDTO compaDTO = new CompanyDTO(id,name);
+		CompanyDTO compaDTO=null;
+		if (compa!=null) {
+			long id=compa.getId();
+			String name=compa.getName();
+			compaDTO = new CompanyDTO(id,name);
+		}
 		return compaDTO;
 	}
 }

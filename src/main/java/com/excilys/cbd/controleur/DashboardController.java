@@ -1,5 +1,6 @@
 package com.excilys.cbd.controleur;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,8 +24,8 @@ public class DashboardController {
 	public ServiceComputer serviceComputer;
 	
 	private String search(String recherche,ModelMap dataMap) throws ClassNotFoundException{
-		ArrayList<ComputerDTO>computerDTOList=new ArrayList<ComputerDTO>();
-		ArrayList<Computer>computerList=new ArrayList<Computer>();
+		List<ComputerDTO>computerDTOList=new ArrayList<ComputerDTO>();
+		List<Computer>computerList=new ArrayList<Computer>();
 		computerList=serviceComputer.findComputerByName(recherche);
 		totalComputer=computerList.size();
 		dataMap.put("totalComputer", totalComputer);
@@ -34,8 +34,8 @@ public class DashboardController {
 		return "dashboard";
 	}
 	private String classement(int tri, String colonne, int taillePage,int page, ModelMap dataMap) throws ClassNotFoundException {
-		ArrayList<ComputerDTO>computerDTOList=new ArrayList<ComputerDTO>();
-		ArrayList<Computer>computerList=new ArrayList<Computer>();
+		List<ComputerDTO>computerDTOList=new ArrayList<ComputerDTO>();
+		List<Computer>computerList=new ArrayList<Computer>();
 		totalComputer=serviceComputer.getCount();
 		maxPage=totalComputer/taillePage;
 		tri%=3;

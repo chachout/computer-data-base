@@ -1,9 +1,21 @@
 package com.excilys.cbd.model;
-
+import javax.persistence.*;
+@Entity
+@Table(name = "company")
 public class Company 
 {
+	@Id
+	@Column(name="id")
 	private long id;
+	
+	@Column(name="name")
 	private String name;
+	
+	public Company()
+	{
+		
+	}
+	
 	private Company(CompanyBuilder builder) 
 	{
 		this.id=builder.id;
