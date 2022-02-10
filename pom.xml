@@ -25,7 +25,7 @@
     <jstl-version>1.2</jstl-version>
     <spring-version>5.2.3.RELEASE</spring-version>
     <commonslogging-version>1.1</commonslogging-version>
-    <hibernatecore-version>5.4.12.Final</hibernatecore-version>
+    <hibernatecore-version>5.4.24.Final</hibernatecore-version>
   </properties>
   
   <dependencies>
